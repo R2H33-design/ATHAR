@@ -24,18 +24,29 @@ async function loadAI() {
       "❌ تعذر تحميل نموذج الذكاء الاصطناعي";
   }
 }
-
-async function startCamera() {
-
+async function loadAI() {
   try {
+    document.getElementById("result").innerText =
+      "⏳ جاري تحميل الذكاء الاصطناعي...";
 
-    const video = document.getElementById("camera");
+    const modelURL =
+      "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/model.json";
 
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: {
-          ideal: "environment"
-        }
+    const metadataURL =
+      "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/metadata.json";
+
+    model = await tmImage.load(modelURL, metadataURL);
+
+    document.getElementById("result").innerText =
+      "✅ الذكاء الاصطناعي جاهز!";
+      
+  } catch (error) {
+    console.error("AI ERROR:", error);
+
+    document.getElementById("result").innerText =
+      "❌ تعذر تحميل نموذج الذكاء الاصطناعي";
+  }
+}
       },
       audio: false
     });
