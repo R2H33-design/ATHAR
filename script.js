@@ -10,9 +10,9 @@ async function loadAI() {
       "⏳ جاري تحميل الذكاء الاصطناعي...";
 
     model = await tmImage.load(
-      MODEL_URL + "model.json",
-      MODEL_URL + "metadata.json"
-    );
+  "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/model.json",
+  "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/metadata.json"
+);
 
     document.getElementById("result").innerText =
       "✅ الذكاء الاصطناعي جاهز!";
