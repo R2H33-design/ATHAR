@@ -2,8 +2,9 @@ let model = null;
 let stream = null;
 let classNames = [];
 
-const MODEL_URL =
-  "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/";
+
+  const MODEL_URL =
+  "https://teachablemachine.withgoogle.com/models/0K2iyuDJ9/";
 
 const landmarks = {
   "AL MASMAK": {
