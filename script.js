@@ -9,7 +9,7 @@ const landmarks = {
     ar: "🏰 قصر المصمك\nمن أبرز المعالم التاريخية في مدينة الرياض.",
     en: "🏰 Al Masmak Palace\nOne of the most important historical landmarks in Riyadh.",
     fr: "🏰 Palais Al Masmak\nUn important monument historique de Riyad.",
-    es: "🏰 Palacio Al Masmak\nUno de los monumentos históricos más importantes de Riad."
+    es: "🏰 Palacio Al Masmak\nUno de los monumentos historiques les plus importants de Riyad."
   },
 
   "DIRIYAH": {
@@ -28,40 +28,44 @@ const landmarks = {
 };
 
 
+// تحميل نموذج الذكاء الاصطناعي
 async function loadAI() {
+  const result = document.getElementById("result");
 
   try {
+    result.innerText = "⏳ جاري تشغيل الذكاء الاصطناعي...";
 
-    document.getElementById("result").innerText =
-      "⏳ جاري تحميل الذكاء الاصطناعي...";
+    if (typeof tmImage === "undefined") {
+      throw new Error("tmImage غير موجود");
+    }
 
     model = await tmImage.load(
       MODEL_URL + "model.json",
       MODEL_URL + "metadata.json"
     );
 
-    document.getElementById("result").innerText =
-      "✅ الذكاء الاصطناعي جاهز!";
+    result.innerText = "✅ الذكاء الاصطناعي جاهز!";
 
-    console.log("AI MODEL READY");
+    console.log("AI READY");
 
   } catch (error) {
 
     console.error("AI ERROR:", error);
 
-    document.getElementById("result").innerText =
-      "❌ تعذر تحميل الذكاء الاصطناعي";
-
+    result.innerText =
+      "❌ فشل تشغيل الذكاء الاصطناعي\n\n" +
+      "الخطأ: " +
+      error.message;
   }
 }
 
 
+// تشغيل الكاميرا
 async function startCamera() {
 
   try {
 
-    const video =
-      document.getElementById("camera");
+    const video = document.getElementById("camera");
 
     stream =
       await navigator.mediaDevices.getUserMedia({
@@ -88,35 +92,30 @@ async function startCamera() {
 
     document.getElementById("result").innerText =
       "❌ لم نتمكن من تشغيل الكاميرا";
-
   }
 }
 
 
+// التقاط الصورة والتعرف على الأثر
 async function takePhoto() {
+
+  const result = document.getElementById("result");
 
   if (!model) {
 
-    document.getElementById("result").innerText =
+    result.innerText =
       "⏳ الذكاء الاصطناعي لم يكتمل تحميله بعد";
 
     return;
-
   }
 
   try {
 
-    const video =
-      document.getElementById("camera");
+    const video = document.getElementById("camera");
+    const canvas = document.getElementById("photo");
 
-    const canvas =
-      document.getElementById("photo");
-
-    canvas.width =
-      video.videoWidth;
-
-    canvas.height =
-      video.videoHeight;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
 
     const context =
       canvas.getContext("2d");
@@ -128,6 +127,9 @@ async function takePhoto() {
       canvas.width,
       canvas.height
     );
+
+    result.innerText =
+      "🔎 جاري التعرف على الأثر...";
 
     const predictions =
       await model.predict(canvas);
@@ -149,7 +151,6 @@ async function takePhoto() {
         best = predictions[i];
 
       }
-
     }
 
     const confidence =
@@ -159,11 +160,13 @@ async function takePhoto() {
 
     if (confidence < 60) {
 
-      document.getElementById("result").innerText =
-        "❓ لم أتعرف على الأثر بثقة كافية";
+      result.innerText =
+        "❓ لم أتعرف على الأثر بثقة كافية\n" +
+        "نسبة الثقة: " +
+        confidence +
+        "%";
 
       return;
-
     }
 
     showLandmark(
@@ -173,16 +176,19 @@ async function takePhoto() {
 
   } catch (error) {
 
-    console.error("PREDICTION ERROR:", error);
+    console.error(
+      "PREDICTION ERROR:",
+      error
+    );
 
-    document.getElementById("result").innerText =
-      "❌ حدث خطأ أثناء التعرف على الأثر";
-
+    result.innerText =
+      "❌ حدث خطأ أثناء التعرف\n\n" +
+      error.message;
   }
-
 }
 
 
+// عرض معلومات الأثر
 function showLandmark(
   className,
   confidence
@@ -207,7 +213,6 @@ function showLandmark(
       "%";
 
     return;
-
   }
 
   document.getElementById("result").innerText =
@@ -216,13 +221,12 @@ function showLandmark(
     confidence +
     "%\n\n" +
     landmark[language];
-
 }
 
 
+// تغيير اللغة
 function changeLanguage() {
 
   document.getElementById("result").innerText =
     "🌍 تم تغيير اللغة";
-
 }
