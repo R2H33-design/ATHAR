@@ -4,69 +4,94 @@ let stream = null;
 const MODEL_URL =
   "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/";
 
+const landmarks = {
+  "AL MASMAK": {
+    ar: "🏰 قصر المصمك\nمن أبرز المعالم التاريخية في مدينة الرياض.",
+    en: "🏰 Al Masmak Palace\nOne of the most important historical landmarks in Riyadh.",
+    fr: "🏰 Palais Al Masmak\nUn important monument historique de Riyad.",
+    es: "🏰 Palacio Al Masmak\nUno de los monumentos históricos más importantes de Riad."
+  },
+
+  "DIRIYAH": {
+    ar: "🏛️ الدرعية\nمدينة تاريخية مهمة في المملكة العربية السعودية.",
+    en: "🏛️ Diriyah\nAn important historical city in Saudi Arabia.",
+    fr: "🏛️ Diriyah\nUne ville historique importante d'Arabie saoudite.",
+    es: "🏛️ Diriyah\nUna importante ciudad histórica de Arabia Saudita."
+  },
+
+  "AL HIJR": {
+    ar: "🏜️ الحِجر\nموقع أثري شهير في منطقة العلا.",
+    en: "🏜️ Al-Hijr\nA famous archaeological site in AlUla.",
+    fr: "🏜️ Al-Hijr\nUn célèbre site archéologique à AlUla.",
+    es: "🏜️ Al-Hijr\nUn famoso sitio arqueológico en AlUla."
+  }
+};
+
+
 async function loadAI() {
+
   try {
+
     document.getElementById("result").innerText =
       "⏳ جاري تحميل الذكاء الاصطناعي...";
 
     model = await tmImage.load(
-  "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/model.json",
-  "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/metadata.json"
-);
+      MODEL_URL + "model.json",
+      MODEL_URL + "metadata.json"
+    );
 
     document.getElementById("result").innerText =
       "✅ الذكاء الاصطناعي جاهز!";
-      
+
+    console.log("AI MODEL READY");
+
   } catch (error) {
-    console.error(error);
 
-    document.getElementById("result").innerText =
-  "❌ خطأ: " + error.message;
-}
-async function loadAI() {
-  try {
-    document.getElementById("result").innerText =
-      "⏳ جاري تحميل الذكاء الاصطناعي...";
-
-    const modelURL =
-      "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/model.json";
-
-    const metadataURL =
-      "https://teachablemachine.withgoogle.com/models/TKDg2pMZf/metadata.json";
-
-    model = await tmImage.load(modelURL, metadataURL);
-
-    document.getElementById("result").innerText =
-      "✅ الذكاء الاصطناعي جاهز!";
-      
-  } catch (error) {
     console.error("AI ERROR:", error);
 
     document.getElementById("result").innerText =
-      "❌ تعذر تحميل نموذج الذكاء الاصطناعي";
+      "❌ تعذر تحميل الذكاء الاصطناعي";
+
   }
 }
-      },
-      audio: false
-    });
+
+
+async function startCamera() {
+
+  try {
+
+    const video =
+      document.getElementById("camera");
+
+    stream =
+      await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: {
+            ideal: "environment"
+          }
+        },
+        audio: false
+      });
 
     video.srcObject = stream;
 
     await video.play();
 
-    document.getElementById("cameraMessage").style.display = "none";
+    document.getElementById("cameraMessage").style.display =
+      "none";
 
     loadAI();
 
   } catch (error) {
 
-    console.error(error);
+    console.error("CAMERA ERROR:", error);
 
     document.getElementById("result").innerText =
       "❌ لم نتمكن من تشغيل الكاميرا";
 
   }
 }
+
 
 async function takePhoto() {
 
@@ -76,168 +101,128 @@ async function takePhoto() {
       "⏳ الذكاء الاصطناعي لم يكتمل تحميله بعد";
 
     return;
+
   }
 
-  const video = document.getElementById("camera");
-  const canvas = document.getElementById("photo");
+  try {
 
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+    const video =
+      document.getElementById("camera");
 
-  const context = canvas.getContext("2d");
+    const canvas =
+      document.getElementById("photo");
 
-  context.drawImage(
-    video,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
+    canvas.width =
+      video.videoWidth;
 
-  const predictions = await model.predict(canvas);
+    canvas.height =
+      video.videoHeight;
 
-  let bestPrediction = predictions[0];
+    const context =
+      canvas.getContext("2d");
 
-  for (let i = 1; i < predictions.length; i++) {
+    context.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
-    if (
-      predictions[i].probability >
-      bestPrediction.probability
+    const predictions =
+      await model.predict(canvas);
+
+    let best =
+      predictions[0];
+
+    for (
+      let i = 1;
+      i < predictions.length;
+      i++
     ) {
 
-      bestPrediction = predictions[i];
+      if (
+        predictions[i].probability >
+        best.probability
+      ) {
+
+        best = predictions[i];
+
+      }
 
     }
-  }
 
-  const confidence =
-    Math.round(bestPrediction.probability * 100);
+    const confidence =
+      Math.round(
+        best.probability * 100
+      );
 
-  let name = bestPrediction.className;
+    if (confidence < 60) {
 
-  if (confidence < 60) {
+      document.getElementById("result").innerText =
+        "❓ لم أتعرف على الأثر بثقة كافية";
+
+      return;
+
+    }
+
+    showLandmark(
+      best.className,
+      confidence
+    );
+
+  } catch (error) {
+
+    console.error("PREDICTION ERROR:", error);
 
     document.getElementById("result").innerText =
-      "❓ لم أتعرف على الأثر بثقة كافية";
+      "❌ حدث خطأ أثناء التعرف على الأثر";
 
-    return;
   }
 
-  showLandmark(name, confidence);
 }
 
-function showLandmark(name, confidence) {
+
+function showLandmark(
+  className,
+  confidence
+) {
 
   const language =
     document.getElementById("language").value;
 
-  let text = "";
+  const key =
+    className.trim().toUpperCase();
 
-  if (
-    name.toLowerCase().includes("masmak") ||
-    name.includes("مصمك")
-  ) {
+  const landmark =
+    landmarks[key];
 
-    if (language === "ar") {
-      text =
-        "🏰 قصر المصمك\n\n" +
-        "من أبرز المعالم التاريخية في مدينة الرياض.";
-    }
+  if (!landmark) {
 
-    else if (language === "en") {
-      text =
-        "🏰 Al Masmak Palace\n\n" +
-        "One of the most important historical landmarks in Riyadh.";
-    }
+    document.getElementById("result").innerText =
+      "📍 تم التعرف على: " +
+      className +
+      "\nنسبة الثقة: " +
+      confidence +
+      "%";
 
-    else if (language === "fr") {
-      text =
-        "🏰 Palais Al Masmak\n\n" +
-        "L'un des monuments historiques les plus importants de Riyad.";
-    }
+    return;
 
-    else {
-      text =
-        "🏰 Palacio Al Masmak\n\n" +
-        "Uno de los monumentos históricos más importantes de Riad.";
-    }
-  }
-
-  else if (
-    name.toLowerCase().includes("diriyah") ||
-    name.includes("درعية")
-  ) {
-
-    if (language === "ar") {
-      text =
-        "🏛️ الدرعية\n\n" +
-        "مدينة تاريخية مهمة في المملكة العربية السعودية.";
-    }
-
-    else if (language === "en") {
-      text =
-        "🏛️ Diriyah\n\n" +
-        "An important historical city in Saudi Arabia.";
-    }
-
-    else if (language === "fr") {
-      text =
-        "🏛️ Diriyah\n\n" +
-        "Une ville historique importante d'Arabie saoudite.";
-    }
-
-    else {
-      text =
-        "🏛️ Diriyah\n\n" +
-        "Una importante ciudad histórica de Arabia Saudita.";
-    }
-  }
-
-  else if (
-    name.toLowerCase().includes("hijr") ||
-    name.toLowerCase().includes("hegra") ||
-    name.includes("حجر")
-  ) {
-
-    if (language === "ar") {
-      text =
-        "🏜️ الحِجر\n\n" +
-        "موقع أثري شهير في منطقة العلا.";
-    }
-
-    else if (language === "en") {
-      text =
-        "🏜️ Al-Hijr\n\n" +
-        "A famous archaeological site in AlUla.";
-    }
-
-    else if (language === "fr") {
-      text =
-        "🏜️ Al-Hijr\n\n" +
-        "Un célèbre site archéologique à AlUla.";
-    }
-
-    else {
-      text =
-        "🏜️ Al-Hijr\n\n" +
-        "Un famoso sitio arqueológico en AlUla.";
-    }
-  }
-
-  else {
-
-    text =
-      "📍 " + name;
   }
 
   document.getElementById("result").innerText =
     "✅ تم التعرف على الأثر\n" +
-    "نسبة الثقة: " + confidence + "%\n\n" +
-    text;
+    "نسبة الثقة: " +
+    confidence +
+    "%\n\n" +
+    landmark[language];
+
 }
+
 
 function changeLanguage() {
 
   document.getElementById("result").innerText =
     "🌍 تم تغيير اللغة";
+
 }
