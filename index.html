@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ATHAR</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f5f1e8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .app {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 40px;
+        }
+
+        .language-box {
+            margin: 20px 0;
+        }
+
+        select,
+        button {
+            padding: 12px;
+            margin: 8px;
+            border-radius: 8px;
+            border: 1px solid #999;
+            font-size: 16px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .camera-box {
+            position: relative;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 15px;
+            background: black;
+        }
+
+        .camera-message {
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        canvas {
+            display: none;
+        }
+
+        #result {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <h1>🏛️ ATHAR</h1>
+
+    <h2>
+        Discover the history of landmarks through your camera
+    </h2>
+
+    <p>
+        اكتشف تاريخ الآثار من خلال كامرتك
+    </p>
+
+
+    <div class="language-box">
+
+        <label>
+            🌍 Language / اللغة
+        </label>
+
+        <br>
+
+        <select id="language" onchange="changeLanguage()">
+
+            <option value="ar">
+                🇸🇦 العربية
+            </option>
+
+            <option value="en">
+                🇬🇧 English
+            </option>
+
+            <option value="fr">
+                🇫🇷 Français
+            </option>
+
+            <option value="es">
+                🇪🇸 Español
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <button
+        onclick="startCamera()"
+        id="cameraButton">
+
+        📷 Open Camera | فتح الكاميرا
+
+    </button>
+
+
+    <div class="camera-box">
+
+        <video
+            id="camera"
+            autoplay
+            playsinline>
+        </video>
+
+        <div
+            class="camera-message"
+            id="cameraMessage">
+
+            📷 Camera Preview
+            <br>
+
+            <span>
+                ستظهر الكاميرا هنا
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <button
+        onclick="takePhoto()"
+        id="captureButton">
+
+        📸 Capture Landmark | التقاط الأثر
+
+    </button>
+
+
+    <canvas id="photo"></canvas>
+
+
+    <div id="result">
+
+        لم يتم التعرف على موقع بعد
+
+    </div>
+
+</div>
+
+
+<!-- الذكاء الاصطناعي -->
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
+
+
+</body>
+
+</html>
