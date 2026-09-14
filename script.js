@@ -21,8 +21,7 @@ async function loadAI() {
     console.error(error);
 
     document.getElementById("result").innerText =
-      "❌ تعذر تحميل نموذج الذكاء الاصطناعي";
-  }
+  "❌ خطأ: " + error.message;
 }
 async function loadAI() {
   try {
