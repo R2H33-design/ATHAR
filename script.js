@@ -9,7 +9,7 @@ const landmarks = {
     ar: "🏰 قصر المصمك\nمن أبرز المعالم التاريخية في مدينة الرياض.",
     en: "🏰 Al Masmak Palace\nOne of the most important historical landmarks in Riyadh.",
     fr: "🏰 Palais Al Masmak\nUn important monument historique de Riyad.",
-    es: "🏰 Palacio Al Masmak\nUno de los monumentos históricos de Riad."
+    es: "🏰 Palacio Al Masmak\nUno de los monumentos historiques de Riad."
   },
 
   "DIRIYAH": {
@@ -23,29 +23,24 @@ const landmarks = {
     ar: "🏜️ الحِجر\nموقع أثري شهير في منطقة العلا.",
     en: "🏜️ Al-Hijr\nA famous archaeological site in AlUla.",
     fr: "🏜️ Al-Hijr\nUn célèbre site archéologique à AlUla.",
-    es: "🏜️ Al-Hijr\nUn famoso sitio arqueológico en AlUla."
+    es: "🏜️ Al-Hijr\nUn famoso sitio arqueológico de AlUla."
   }
 };
 
 
-// تحميل نموذج الذكاء الاصطناعي
+// تحميل الذكاء الاصطناعي
 async function loadAI() {
   const result = document.getElementById("result");
 
   try {
     result.innerText = "⏳ جاري تحميل الذكاء الاصطناعي...";
 
-    model = await tf.loadLayersModel(
-      MODEL_URL + "model.json"
-    );
-
-    const response = await fetch(
+    model = await tmImage.load(
+      MODEL_URL + "model.json",
       MODEL_URL + "metadata.json"
     );
 
-    const metadata = await response.json();
-
-    classNames = metadata.labels;
+    classNames = model.getClassLabels();
 
     console.log("MODEL READY");
     console.log("Classes:", classNames);
@@ -57,7 +52,7 @@ async function loadAI() {
     console.error("AI ERROR:", error);
 
     result.innerText =
-      "❌ تعذر تحميل الذكاء الاصطناعي\n\n" +
+      "❌ تعذر تحميل نموذج الذكاء الاصطناعي\n\n" +
       error.message;
   }
 }
@@ -65,9 +60,7 @@ async function loadAI() {
 
 // تشغيل الكاميرا
 async function startCamera() {
-
   try {
-
     const video = document.getElementById("camera");
 
     stream = await navigator.mediaDevices.getUserMedia({
@@ -83,21 +76,15 @@ async function startCamera() {
 
     await video.play();
 
-    document.getElementById(
-      "cameraMessage"
-    ).style.display = "none";
+    document.getElementById("cameraMessage").style.display = "none";
 
-    loadAI();
-
+    await loadAI();
   }
 
   catch (error) {
-
     console.error("CAMERA ERROR:", error);
 
-    document.getElementById(
-      "result"
-    ).innerText =
+    document.getElementById("result").innerText =
       "❌ لم نتمكن من تشغيل الكاميرا";
   }
 }
@@ -105,93 +92,43 @@ async function startCamera() {
 
 // التقاط الصورة والتعرف على الأثر
 async function takePhoto() {
-
-  const result =
-    document.getElementById("result");
+  const result = document.getElementById("result");
 
   if (!model) {
-
     result.innerText =
       "⏳ انتظري حتى يكتمل تحميل الذكاء الاصطناعي";
-
     return;
   }
 
   try {
-
-    const video =
-      document.getElementById("camera");
-
-    const canvas =
-      document.getElementById("photo");
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    const context =
-      canvas.getContext("2d");
-
-    context.drawImage(
-      video,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+    const video = document.getElementById("camera");
 
     result.innerText =
       "🔎 جاري التعرف على الأثر...";
 
-    let image =
-      tf.browser.fromPixels(canvas);
+    const predictions =
+      await model.predict(video);
 
-    image =
-      tf.image.resizeBilinear(
-        image,
-        [224, 224]
-      );
+    console.log("Predictions:", predictions);
 
-    image =
-      image
-        .toFloat()
-        .div(127.5)
-        .sub(1);
+    let bestPrediction = predictions[0];
 
-    image =
-      image.expandDims(0);
-
-    const prediction =
-      model.predict(image);
-
-    const probabilities =
-      await prediction.data();
-
-    let bestIndex = 0;
-
-    for (
-      let i = 1;
-      i < probabilities.length;
-      i++
-    ) {
-
+    for (let i = 1; i < predictions.length; i++) {
       if (
-        probabilities[i] >
-        probabilities[bestIndex]
+        predictions[i].probability >
+        bestPrediction.probability
       ) {
-        bestIndex = i;
+        bestPrediction = predictions[i];
       }
     }
 
+    const className =
+      bestPrediction.className;
+
     const confidence =
       Math.round(
-        probabilities[bestIndex] * 100
+        bestPrediction.probability * 100
       );
-
-    const className =
-      classNames[bestIndex];
-
-    image.dispose();
-    prediction.dispose();
 
     console.log(
       "Prediction:",
@@ -200,13 +137,11 @@ async function takePhoto() {
     );
 
     if (confidence < 60) {
-
       result.innerText =
         "❓ لم أتعرف على الأثر بثقة كافية\n\n" +
         "نسبة الثقة: " +
         confidence +
         "%";
-
       return;
     }
 
@@ -214,11 +149,9 @@ async function takePhoto() {
       className,
       confidence
     );
-
   }
 
   catch (error) {
-
     console.error(
       "PREDICTION ERROR:",
       error
@@ -236,57 +169,41 @@ function showLandmark(
   className,
   confidence
 ) {
-
   const language =
-    document.getElementById(
-      "language"
-    ).value;
+    document.getElementById("language").value;
 
   const key =
-    className
-      .trim()
-      .toUpperCase();
+    className.trim().toUpperCase();
 
   const landmark =
     landmarks[key];
 
   if (!landmark) {
-
-    document.getElementById(
-      "result"
-    ).innerText =
+    document.getElementById("result").innerText =
       "📍 تم التعرف على: " +
       className +
-      "\n\nنسبة الثقة: " +
+      "\n\n" +
+      "🎯 نسبة الثقة: " +
       confidence +
       "%";
 
     return;
   }
 
-  document.getElementById(
-    "result"
-  ).innerText =
-
+  document.getElementById("result").innerText =
     "✅ تم التعرف على الأثر\n\n" +
-
     "📍 " +
     className +
     "\n" +
-
     "🎯 نسبة الثقة: " +
     confidence +
     "%\n\n" +
-
     landmark[language];
 }
 
 
 // تغيير اللغة
 function changeLanguage() {
-
-  document.getElementById(
-    "result"
-  ).innerText =
+  document.getElementById("result").innerText =
     "🌍 تم تغيير اللغة";
 }
