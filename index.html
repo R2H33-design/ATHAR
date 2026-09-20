@@ -68,6 +68,7 @@
             padding: 20px;
             margin-top: 20px;
             border-radius: 15px;
+            white-space: pre-line;
         }
     </style>
 </head>
@@ -85,7 +86,6 @@
     <p>
         اكتشف تاريخ الآثار من خلال كامرتك
     </p>
-
 
     <div class="language-box">
 
@@ -117,7 +117,6 @@
 
     </div>
 
-
     <button
         onclick="startCamera()"
         id="cameraButton">
@@ -125,7 +124,6 @@
         📷 Open Camera | فتح الكاميرا
 
     </button>
-
 
     <div class="camera-box">
 
@@ -150,7 +148,6 @@
 
     </div>
 
-
     <button
         onclick="takePhoto()"
         id="captureButton">
@@ -159,9 +156,7 @@
 
     </button>
 
-
     <canvas id="photo"></canvas>
-
 
     <div id="result">
 
@@ -175,9 +170,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
+
 <script src="script.js"></script>
 
 </body>
 </html>
-
- 
