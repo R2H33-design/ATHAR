@@ -35,10 +35,9 @@ async function loadAI() {
   try {
     result.innerText = "⏳ جاري تحميل الذكاء الاصطناعي...";
 
-    model = await tmImage.load(
-      MODEL_URL + "model.json",
-      MODEL_URL + "metadata.json"
-    );
+    model = await tf.loadLayersModel(
+  MODEL_URL + "model.json"
+);
 
     classNames = model.getClassLabels();
 
