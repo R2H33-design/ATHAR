@@ -9,7 +9,7 @@ const landmarks = {
         ar: "🏰 قصر المصمك\nمن أبرز المعالم التاريخية في مدينة الرياض.",
         en: "🏰 Al Masmak Palace\nOne of the most important historical landmarks in Riyadh.",
         fr: "🏰 Palais Al Masmak\nUn important monument historique de Riyad.",
-        es: "🏰 Palacio Al Masmak\nUno de los monumentos históricos de Riad."
+        es: "🏰 Palacio Al Masmak\nUno de los monumentos historiques de Riad."
     },
 
     "DIRIYAH": {
@@ -35,7 +35,8 @@ async function loadAI() {
 
     try {
 
-        result.innerText = "⏳ جاري تحميل الذكاء الاصطناعي...";
+        result.innerText =
+            "⏳ جاري تحميل الذكاء الاصطناعي...";
 
         model = await tf.loadLayersModel(
             MODEL_URL + "model.json"
@@ -52,7 +53,8 @@ async function loadAI() {
         console.log("MODEL READY");
         console.log("Classes:", classNames);
 
-        result.innerText = "✅ الذكاء الاصطناعي جاهز!";
+        result.innerText =
+            "✅ الذكاء الاصطناعي جاهز!";
 
     } catch (error) {
 
@@ -70,30 +72,39 @@ async function startCamera() {
 
     try {
 
-        const video = document.getElementById("camera");
+        const video =
+            document.getElementById("camera");
 
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: {
-                    ideal: "environment"
-                }
-            },
-            audio: false
-        });
+        stream =
+            await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: {
+                        ideal: "environment"
+                    }
+                },
+                audio: false
+            });
 
         video.srcObject = stream;
 
         await video.play();
 
-        document.getElementById("cameraMessage").style.display = "none";
+        document.getElementById(
+            "cameraMessage"
+        ).style.display = "none";
 
         await loadAI();
 
     } catch (error) {
 
-        console.error("CAMERA ERROR:", error);
+        console.error(
+            "CAMERA ERROR:",
+            error
+        );
 
-        document.getElementById("result").innerText =
+        document.getElementById(
+            "result"
+        ).innerText =
             "❌ لم نتمكن من تشغيل الكاميرا";
     }
 }
@@ -102,7 +113,8 @@ async function startCamera() {
 // التعرف على الأثر
 async function takePhoto() {
 
-    const result = document.getElementById("result");
+    const result =
+        document.getElementById("result");
 
     if (!model) {
 
@@ -114,10 +126,16 @@ async function takePhoto() {
 
     try {
 
-        const video = document.getElementById("camera");
-        const canvas = document.getElementById("photo");
+        const video =
+            document.getElementById("camera");
 
-        if (!video.videoWidth || !video.videoHeight) {
+        const canvas =
+            document.getElementById("photo");
+
+        if (
+            !video.videoWidth ||
+            !video.videoHeight
+        ) {
 
             result.innerText =
                 "❌ الكاميرا لم تصبح جاهزة بعد";
@@ -125,10 +143,14 @@ async function takePhoto() {
             return;
         }
 
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        canvas.width =
+            video.videoWidth;
 
-        const context = canvas.getContext("2d");
+        canvas.height =
+            video.videoHeight;
+
+        const context =
+            canvas.getContext("2d");
 
         context.drawImage(
             video,
@@ -141,23 +163,29 @@ async function takePhoto() {
         result.innerText =
             "🔎 جاري التعرف على الأثر...";
 
-        let image = tf.browser.fromPixels(canvas);
+        let image =
+            tf.browser.fromPixels(canvas);
 
-        image = tf.image.resizeBilinear(
-            image,
-            [224, 224]
-        );
+        image =
+            tf.image.resizeBilinear(
+                image,
+                [224, 224]
+            );
 
-        image = image
-            .toFloat()
-            .div(127.5)
-            .sub(1);
+        image =
+            image
+                .toFloat()
+                .div(127.5)
+                .sub(1);
 
-        image = image.expandDims(0);
+        image =
+            image.expandDims(0);
 
-        const prediction = model.predict(image);
+        const prediction =
+            model.predict(image);
 
-        const probabilities = await prediction.data();
+        const probabilities =
+            await prediction.data();
 
         let bestIndex = 0;
 
@@ -171,19 +199,51 @@ async function takePhoto() {
                 probabilities[i] >
                 probabilities[bestIndex]
             ) {
+
                 bestIndex = i;
             }
         }
 
-        const confidence = Math.round(
-            probabilities[bestIndex] * 100
+        const confidence =
+            Math.round(
+                probabilities[bestIndex] * 100
+            );
+
+        const className =
+            classNames[bestIndex];
+
+        // عرض جميع النسب
+        let allResults = "";
+
+        for (
+            let i = 0;
+            i < probabilities.length;
+            i++
+        ) {
+
+            allResults +=
+                classNames[i] +
+                ": " +
+                Math.round(
+                    probabilities[i] * 100
+                ) +
+                "%\n";
+        }
+
+        console.log(
+            "All probabilities:",
+            probabilities
         );
 
-        const className = classNames[bestIndex];
-
-        console.log("Prediction:", className);
-        console.log("Confidence:", confidence + "%");
-        console.log("All probabilities:", probabilities);
+        // عرض النتائج للتجربة
+        result.innerText =
+            "🔎 نتائج التعرف:\n\n" +
+            allResults +
+            "\n📍 أعلى نتيجة: " +
+            className +
+            "\n🎯 الثقة: " +
+            confidence +
+            "%";
 
         image.dispose();
 
@@ -191,25 +251,12 @@ async function takePhoto() {
             prediction.dispose();
         }
 
-        if (confidence < 60) {
-
-            result.innerText =
-                "❓ لم أتعرف على الأثر بثقة كافية\n\n" +
-                "نسبة الثقة: " +
-                confidence +
-                "%";
-
-            return;
-        }
-
-        showLandmark(
-            className,
-            confidence
-        );
-
     } catch (error) {
 
-        console.error("PREDICTION ERROR:", error);
+        console.error(
+            "PREDICTION ERROR:",
+            error
+        );
 
         result.innerText =
             "❌ حدث خطأ أثناء التعرف\n\n" +
@@ -218,46 +265,11 @@ async function takePhoto() {
 }
 
 
-// عرض معلومات الأثر
-function showLandmark(className, confidence) {
-
-    const language =
-        document.getElementById("language").value;
-
-    const key =
-        className.trim().toUpperCase();
-
-    const landmark =
-        landmarks[key];
-
-    if (!landmark) {
-
-        document.getElementById("result").innerText =
-            "📍 تم التعرف على: " +
-            className +
-            "\n\n" +
-            "🎯 نسبة الثقة: " +
-            confidence +
-            "%";
-
-        return;
-    }
-
-    document.getElementById("result").innerText =
-        "✅ تم التعرف على الأثر\n\n" +
-        "📍 " +
-        className +
-        "\n" +
-        "🎯 نسبة الثقة: " +
-        confidence +
-        "%\n\n" +
-        landmark[language];
-}
-
-
 // تغيير اللغة
 function changeLanguage() {
 
-    document.getElementById("result").innerText =
+    document.getElementById(
+        "result"
+    ).innerText =
         "🌍 تم تغيير اللغة";
 }
