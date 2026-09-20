@@ -2,22 +2,20 @@ let model = null;
 let stream = null;
 let classNames = [];
 
-
-  const MODEL_URL = "./";
-  
+const MODEL_URL = "./";
 
 const landmarks = {
   "AL MASMAK": {
     ar: "🏰 قصر المصمك\nمن أبرز المعالم التاريخية في مدينة الرياض.",
     en: "🏰 Al Masmak Palace\nOne of the most important historical landmarks in Riyadh.",
     fr: "🏰 Palais Al Masmak\nUn important monument historique de Riyad.",
-    es: "🏰 Palacio Al Masmak\nUno de los monumentos historiques de Riyad."
+    es: "🏰 Palacio Al Masmak\nUno de los monumentos históricos de Riad."
   },
 
   "DIRIYAH": {
     ar: "🏛️ الدرعية\nمدينة تاريخية مهمة في المملكة العربية السعودية.",
     en: "🏛️ Diriyah\nAn important historical city in Saudi Arabia.",
-    fr: "🏛️ Diriyah\nUne ville historique importante d'Arabie saoudite.",
+    fr: "🏛️ Diriyah\nUne ville historique importante d’Arabie saoudite.",
     es: "🏛️ Diriyah\nUna importante ciudad histórica de Arabia Saudita."
   },
 
@@ -30,48 +28,36 @@ const landmarks = {
 };
 
 
-// تشغيل الذكاء الاصطناعي
+// تحميل نموذج الذكاء الاصطناعي
 async function loadAI() {
-
   const result = document.getElementById("result");
 
   try {
+    result.innerText = "⏳ جاري تحميل الذكاء الاصطناعي...";
 
-    result.innerText =
-      "⏳ جاري تحميل الذكاء الاصطناعي...";
-
-    // تحميل النموذج مباشرة من TensorFlow
     model = await tf.loadLayersModel(
       MODEL_URL + "model.json"
     );
 
-    // تحميل أسماء الفئات
-    const metadataResponse =
-      await fetch(
-        MODEL_URL + "metadata.json"
-      );
-
-    const metadata =
-      await metadataResponse.json();
-
-    classNames =
-      metadata.labels;
-
-    result.innerText =
-      "✅ الذكاء الاصطناعي جاهز!";
-
-    console.log("MODEL READY");
-    console.log(classNames);
-
-  } catch (error) {
-
-    console.error(
-      "AI ERROR:",
-      error
+    const response = await fetch(
+      MODEL_URL + "metadata.json"
     );
 
+    const metadata = await response.json();
+
+    classNames = metadata.labels;
+
+    console.log("MODEL READY");
+    console.log("Classes:", classNames);
+
+    result.innerText = "✅ الذكاء الاصطناعي جاهز!";
+  }
+
+  catch (error) {
+    console.error("AI ERROR:", error);
+
     result.innerText =
-      "❌ فشل تحميل الذكاء الاصطناعي\n\n" +
+      "❌ تعذر تحميل الذكاء الاصطناعي\n\n" +
       error.message;
   }
 }
@@ -82,21 +68,18 @@ async function startCamera() {
 
   try {
 
-    const video =
-      document.getElementById("camera");
+    const video = document.getElementById("camera");
 
-    stream =
-      await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: {
-            ideal: "environment"
-          }
-        },
-        audio: false
-      });
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: {
+          ideal: "environment"
+        }
+      },
+      audio: false
+    });
 
-    video.srcObject =
-      stream;
+    video.srcObject = stream;
 
     await video.play();
 
@@ -106,12 +89,11 @@ async function startCamera() {
 
     loadAI();
 
-  } catch (error) {
+  }
 
-    console.error(
-      "CAMERA ERROR:",
-      error
-    );
+  catch (error) {
+
+    console.error("CAMERA ERROR:", error);
 
     document.getElementById(
       "result"
@@ -121,7 +103,7 @@ async function startCamera() {
 }
 
 
-// التعرف على الأثر
+// التقاط الصورة والتعرف على الأثر
 async function takePhoto() {
 
   const result =
@@ -130,7 +112,7 @@ async function takePhoto() {
   if (!model) {
 
     result.innerText =
-      "⏳ الذكاء الاصطناعي لم يكتمل تحميله بعد";
+      "⏳ انتظري حتى يكتمل تحميل الذكاء الاصطناعي";
 
     return;
   }
@@ -143,11 +125,8 @@ async function takePhoto() {
     const canvas =
       document.getElementById("photo");
 
-    canvas.width =
-      video.videoWidth;
-
-    canvas.height =
-      video.videoHeight;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
 
     const context =
       canvas.getContext("2d");
@@ -163,7 +142,6 @@ async function takePhoto() {
     result.innerText =
       "🔎 جاري التعرف على الأثر...";
 
-    // تجهيز الصورة للنموذج
     let image =
       tf.browser.fromPixels(canvas);
 
@@ -174,21 +152,20 @@ async function takePhoto() {
       );
 
     image =
-      image.toFloat()
+      image
+        .toFloat()
         .div(127.5)
         .sub(1);
 
     image =
       image.expandDims(0);
 
-    // تشغيل النموذج
     const prediction =
       model.predict(image);
 
     const probabilities =
       await prediction.data();
 
-    // إيجاد أعلى احتمال
     let bestIndex = 0;
 
     for (
@@ -201,7 +178,6 @@ async function takePhoto() {
         probabilities[i] >
         probabilities[bestIndex]
       ) {
-
         bestIndex = i;
       }
     }
@@ -214,14 +190,19 @@ async function takePhoto() {
     const className =
       classNames[bestIndex];
 
-    // تنظيف الذاكرة
     image.dispose();
     prediction.dispose();
+
+    console.log(
+      "Prediction:",
+      className,
+      confidence + "%"
+    );
 
     if (confidence < 60) {
 
       result.innerText =
-        "❓ لم أتعرف على الأثر بثقة كافية\n" +
+        "❓ لم أتعرف على الأثر بثقة كافية\n\n" +
         "نسبة الثقة: " +
         confidence +
         "%";
@@ -234,7 +215,9 @@ async function takePhoto() {
       confidence
     );
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     console.error(
       "PREDICTION ERROR:",
@@ -274,7 +257,7 @@ function showLandmark(
     ).innerText =
       "📍 تم التعرف على: " +
       className +
-      "\nنسبة الثقة: " +
+      "\n\nنسبة الثقة: " +
       confidence +
       "%";
 
@@ -284,10 +267,17 @@ function showLandmark(
   document.getElementById(
     "result"
   ).innerText =
-    "✅ تم التعرف على الأثر\n" +
-    "نسبة الثقة: " +
+
+    "✅ تم التعرف على الأثر\n\n" +
+
+    "📍 " +
+    className +
+    "\n" +
+
+    "🎯 نسبة الثقة: " +
     confidence +
     "%\n\n" +
+
     landmark[language];
 }
 
