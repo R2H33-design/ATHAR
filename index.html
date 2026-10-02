@@ -1,74 +1,266 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ATHAR</title>
+    <title>ATHAR | Discover Heritage</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: #f5f1e8;
             margin: 0;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top, #f8eee9 0%, #efe2da 45%, #e4d3c9 100%);
+            color: #351923;
         }
 
         .app {
-            max-width: 600px;
+            width: 100%;
+            max-width: 850px;
             margin: auto;
+            padding: 35px 18px 60px;
         }
 
-        h1 {
-            font-size: 40px;
+        /* =========================
+           HEADER
+        ========================= */
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
         }
+
+        .logo {
+            display: inline-block;
+            font-size: 52px;
+            font-weight: bold;
+            letter-spacing: 9px;
+            color: #641f35;
+            margin-bottom: 8px;
+        }
+
+        .gold-line {
+            width: 75px;
+            height: 3px;
+            margin: 10px auto 18px;
+            background: #b8945a;
+            border-radius: 10px;
+        }
+
+        .hero h2 {
+            margin: 0 auto 10px;
+            max-width: 650px;
+            font-size: 20px;
+            line-height: 1.5;
+            color: #4b3038;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: 17px;
+            color: #725b61;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           LANGUAGE
+        ========================= */
 
         .language-box {
-            margin: 20px 0;
+            max-width: 550px;
+            margin: 0 auto 25px;
+            padding: 17px 20px;
+            background: rgba(255, 250, 246, 0.9);
+            border: 1px solid #dcc9bf;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(70, 35, 45, 0.08);
         }
 
-        select,
-        button {
-            padding: 12px;
-            margin: 8px;
-            border-radius: 8px;
-            border: 1px solid #999;
+        .language-box label {
+            display: block;
+            margin-bottom: 10px;
+            color: #641f35;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #c6aaa0;
+            border-radius: 12px;
+            background: white;
+            color: #351923;
             font-size: 16px;
+            outline: none;
         }
 
-        button {
-            cursor: pointer;
+        /* =========================
+           CAMERA
+        ========================= */
+
+        .camera-section {
+            padding: 15px;
+            background: #26171d;
+            border-radius: 28px;
+            box-shadow: 0 15px 35px rgba(45, 20, 28, 0.22);
+        }
+
+        .camera-title {
+            color: #f7e9df;
+            text-align: center;
+            font-size: 15px;
+            margin: 5px 0 13px;
         }
 
         .camera-box {
             position: relative;
-            margin: 20px auto;
-            max-width: 500px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #120d0f;
         }
 
         video {
+            display: block;
             width: 100%;
-            border-radius: 15px;
-            background: black;
+            height: 440px;
+            object-fit: cover;
+            background: #120d0f;
         }
 
         .camera-message {
-            margin: 10px;
-            font-size: 16px;
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            padding: 10px;
+            border-radius: 12px;
+            background: rgba(20, 10, 14, 0.72);
+            color: white;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         canvas {
             display: none;
         }
 
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        button {
+            width: 100%;
+            max-width: 430px;
+            display: block;
+            margin: 14px auto 0;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 13px;
+            background: #641f35;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #7a2943;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #cameraButton {
+            margin-bottom: 15px;
+        }
+
+        #captureButton {
+            margin-top: 18px;
+        }
+
+        /* =========================
+           RESULT
+        ========================= */
+
+        .result-section {
+            margin-top: 30px;
+        }
+
+        .result-label {
+            margin-bottom: 12px;
+            text-align: center;
+            color: #641f35;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
         #result {
-            background: white;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 15px;
-            white-space: pre-line;
+            min-height: 90px;
+            padding: 24px;
+            background: rgba(255, 250, 246, 0.95);
+            border: 1px solid #ddccc3;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(65, 30, 40, 0.09);
+            line-height: 1.8;
+            text-align: center;
+            color: #4c3c41;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            margin-top: 35px;
+            text-align: center;
+            color: #806b70;
+            font-size: 13px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .app {
+                padding: 25px 13px 45px;
+            }
+
+            .logo {
+                font-size: 43px;
+                letter-spacing: 7px;
+            }
+
+            .hero h2 {
+                font-size: 17px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            video {
+                height: 360px;
+            }
+
+            .camera-section {
+                padding: 10px;
+                border-radius: 22px;
+            }
+
+            #result {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -77,25 +269,38 @@
 
 <div class="app">
 
-    <h1>🏛️ ATHAR</h1>
+    <!-- HEADER -->
 
-    <h2>
-        Discover the history of landmarks through your camera
-    </h2>
+    <div class="hero">
 
-    <p>
-        اكتشف تاريخ الآثار من خلال كامرتك
-    </p>
+        <div class="logo">
+            ATHAR
+        </div>
+
+        <div class="gold-line"></div>
+
+        <h2>
+            Discover the history of landmarks through your camera
+        </h2>
+
+        <p>
+            اكتشف تاريخ الآثار من خلال كامرتك
+        </p>
+
+    </div>
+
+
+    <!-- LANGUAGE -->
 
     <div class="language-box">
 
-        <label>
-            🌍 Language / اللغة
+        <label for="language">
+            🌍 Language | اللغة
         </label>
 
-        <br>
-
-        <select id="language" onchange="changeLanguage()">
+        <select
+            id="language"
+            onchange="changeLanguage()">
 
             <option value="ar">
                 🇸🇦 العربية
@@ -117,6 +322,9 @@
 
     </div>
 
+
+    <!-- CAMERA -->
+
     <button
         onclick="startCamera()"
         id="cameraButton">
@@ -125,28 +333,40 @@
 
     </button>
 
-    <div class="camera-box">
 
-        <video
-            id="camera"
-            autoplay
-            playsinline>
-        </video>
+    <div class="camera-section">
 
-        <div
-            class="camera-message"
-            id="cameraMessage">
+        <div class="camera-title">
+            📍 Point your camera at a historical landmark
+        </div>
 
-            📷 Camera Preview
-            <br>
+        <div class="camera-box">
 
-            <span>
-                ستظهر الكاميرا هنا
-            </span>
+            <video
+                id="camera"
+                autoplay
+                playsinline>
+            </video>
+
+            <div
+                class="camera-message"
+                id="cameraMessage">
+
+                📷 Camera Preview
+                <br>
+
+                <span>
+                    ستظهر الكاميرا هنا
+                </span>
+
+            </div>
 
         </div>
 
     </div>
+
+
+    <!-- CAPTURE -->
 
     <button
         onclick="takePhoto()"
@@ -156,17 +376,35 @@
 
     </button>
 
+
     <canvas id="photo"></canvas>
 
-    <div id="result">
 
-        لم يتم التعرف على موقع بعد
+    <!-- RESULT -->
 
+    <div class="result-section">
+
+        <div class="result-label">
+            🏛️ Landmark Information
+        </div>
+
+        <div id="result">
+
+            لم يتم التعرف على موقع بعد
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        ATHAR • Smart Heritage Exploration
     </div>
 
 </div>
 
-<!-- الذكاء الاصطناعي -->
+
+<!-- AI -->
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4"></script>
 
@@ -175,4 +413,5 @@
 <script src="script.js?v=2"></script>
 
 </body>
+
 </html>
