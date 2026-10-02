@@ -22,7 +22,7 @@ const languages = {
 
 const landmarks = {
 
-    "AL MASMAK": {
+    "AL-MASMAK": {
         ar: {
             name: "قصر المصمك",
             icon: "🏰",
@@ -73,7 +73,7 @@ const landmarks = {
     },
 
 
-    "AL HIJR": {
+    "AL-HIJR": {
         ar: {
             name: "الحِجر",
             icon: "🏜️",
@@ -124,7 +124,7 @@ const landmarks = {
     },
 
 
-    "DIRIYAH": {
+    "AL-DIRIYAH": {
         ar: {
             name: "الدرعية التاريخية",
             icon: "🏘️",
