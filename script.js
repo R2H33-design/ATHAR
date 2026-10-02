@@ -27,6 +27,10 @@ const languages = {
 
 const landmarks = {
 
+    // ========================================
+    // 🏰 المصمك
+    // ========================================
+
     "AL MASMAK": {
 
         ar: {
@@ -47,7 +51,7 @@ const landmarks = {
                 "يتميز القصر بعناصر دفاعية واضحة، منها الأبراج والجدران السميكة، كما يحتوي على بوابة تاريخية مرتبطة بأحداث استعادة الرياض.",
 
             details:
-                "يتيح الموقع للزائر التعرف على تاريخ الرياض من خلال المبنى التاريخي والمعروضات والمعلومات التي توضح جوانب من الحياة والتراث في المنطقة. ويُعد المصمك اليوم من المعالم الثقافية والتاريخية البارزة في الرياض.",
+                "يتيح الموقع للزائر التعرف على تاريخ الرياض من خلال المبنى التاريخي والمعروضات والمعلومات التي توضح جوانب من الحياة والتراث في المنطقة.",
 
             source:
                 "https://www.visitsaudi.com/ar/riyadh/attractions/al-masmak-palace-in-riyadh"
@@ -68,7 +72,7 @@ const landmarks = {
                 "The palace is important because of its connection to the history of Riyadh and the early stages of Saudi unification. Its design also reflects traditional Najdi architecture.",
 
             fact:
-                "The fortress features defensive elements such as thick walls and towers, as well as a historic gate associated with the events of the recapture of Riyadh.",
+                "The fortress features defensive elements such as thick walls and towers, as well as a historic gate associated with the recapture of Riyadh.",
 
             details:
                 "Today, visitors can explore the historical building, exhibits, and information that present aspects of Riyadh's history and traditional heritage.",
@@ -163,7 +167,7 @@ const landmarks = {
             location: "AlUla, Saudi Arabia",
 
             description:
-                "Hegra, also known as Mada'in صالح, is a major archaeological site in AlUla, known for its monumental tombs and structures carved directly into the surrounding rock formations.",
+                "Hegra, also known as Mada'in Salih, is a major archaeological site in AlUla, known for its monumental tombs and structures carved directly into the surrounding rock formations.",
 
             story:
                 "Hegra was an important stop along ancient trade routes and flourished under the Nabataean civilization. Its rock-cut tombs demonstrate remarkable skill in design, carving, and construction.",
@@ -187,7 +191,7 @@ const landmarks = {
             location: "AlUla, Arabie saoudite",
 
             description:
-                "Hégra, également connue sous le nom de Mada'in صالح, est un site archéologique majeur d'AlUla, célèbre pour ses tombes monumentales et ses structures taillées directement dans la roche.",
+                "Hégra, également connue sous le nom de Mada'in Salih, est un site archéologique majeur d'AlUla, célèbre pour ses tombes monumentales et ses structures taillées directement dans la roche.",
 
             story:
                 "Hégra était une étape importante sur les anciennes routes commerciales et s'est développée sous la civilisation nabatéenne. Ses tombes rupestres témoignent d'une grande maîtrise de la conception et de la construction.",
@@ -211,7 +215,7 @@ const landmarks = {
             location: "AlUla, Arabia Saudita",
 
             description:
-                "Hegra, también conocida como Mada'in صالح, es un importante sitio arqueológico de AlUla, famoso por sus tumbas monumentales y estructuras talladas directamente en la roca.",
+                "Hegra, también conocida como Mada'in Salih, es un importante sitio arqueológico de AlUla, famoso por sus tumbas monumentales y estructuras talladas directamente en la roca.",
 
             story:
                 "Hegra fue una parada importante en las antiguas rutas comerciales y prosperó bajo la civilización nabatea. Sus tumbas excavadas en la roca muestran una notable habilidad arquitectónica.",
@@ -337,12 +341,38 @@ const landmarks = {
 
 
 // ========================================
+// 🔎 مطابقة اسم الأثر
+// ========================================
+
+function findLandmarkKey(className) {
+
+    if (!className) {
+        return null;
+    }
+
+    const cleanName =
+        className
+            .trim()
+            .toUpperCase()
+            .replace(/_/g, " ");
+
+    const keys =
+        Object.keys(landmarks);
+
+    return keys.find(key =>
+        key.trim().toUpperCase() === cleanName
+    ) || null;
+}
+
+
+// ========================================
 // 🧠 تحميل نموذج الذكاء الاصطناعي
 // ========================================
 
 async function loadAI() {
 
-    const result = document.getElementById("result");
+    const result =
+        document.getElementById("result");
 
     try {
 
@@ -351,17 +381,21 @@ async function loadAI() {
                 ? "⏳ جاري تحميل الذكاء الاصطناعي..."
                 : "⏳ Loading AI...";
 
-        model = await tf.loadLayersModel(
-            MODEL_URL + "model.json"
-        );
+        model =
+            await tf.loadLayersModel(
+                MODEL_URL + "model.json"
+            );
 
-        const response = await fetch(
-            MODEL_URL + "metadata.json"
-        );
+        const response =
+            await fetch(
+                MODEL_URL + "metadata.json"
+            );
 
-        const metadata = await response.json();
+        const metadata =
+            await response.json();
 
-        classNames = metadata.labels;
+        classNames =
+            metadata.labels;
 
         console.log("MODEL READY");
         console.log("Classes:", classNames);
@@ -373,13 +407,18 @@ async function loadAI() {
 
     } catch (error) {
 
-        console.error("AI ERROR:", error);
+        console.error(
+            "AI ERROR:",
+            error
+        );
 
         result.innerText =
             "❌ " +
-            (currentLanguage === "ar"
-                ? "تعذر تحميل نموذج الذكاء الاصطناعي"
-                : "AI model could not be loaded") +
+            (
+                currentLanguage === "ar"
+                    ? "تعذر تحميل نموذج الذكاء الاصطناعي"
+                    : "AI model could not be loaded"
+            ) +
             "\n\n" +
             error.message;
     }
@@ -409,15 +448,19 @@ async function startCamera() {
                 audio: false
             });
 
-        video.srcObject = stream;
+        video.srcObject =
+            stream;
 
         await video.play();
 
         const message =
-            document.getElementById("cameraMessage");
+            document.getElementById(
+                "cameraMessage"
+            );
 
         if (message) {
-            message.style.display = "none";
+            message.style.display =
+                "none";
         }
 
         await loadAI();
@@ -440,7 +483,7 @@ async function startCamera() {
 
 
 // ========================================
-// 📸 التقاط الصورة + التعرف الحقيقي
+// 📸 التقاط الصورة + التعرف
 // ========================================
 
 async function takePhoto() {
@@ -496,11 +539,6 @@ async function takePhoto() {
             canvas.height
         );
 
-
-        // ========================================
-        // 🧠 تجهيز الصورة للنموذج
-        // ========================================
-
         result.innerText =
             currentLanguage === "ar"
                 ? "🔎 جاري التعرف على الأثر..."
@@ -523,11 +561,6 @@ async function takePhoto() {
 
         image =
             image.expandDims(0);
-
-
-        // ========================================
-        // 🤖 التنبؤ
-        // ========================================
 
         const prediction =
             model.predict(image);
@@ -555,6 +588,8 @@ async function takePhoto() {
         const className =
             classNames[bestIndex];
 
+        const landmarkKey =
+            findLandmarkKey(className);
 
         console.log(
             "Detected landmark:",
@@ -562,14 +597,14 @@ async function takePhoto() {
         );
 
         console.log(
+            "Matched landmark:",
+            landmarkKey
+        );
+
+        console.log(
             "Probabilities:",
             probabilities
         );
-
-
-        // ========================================
-        // 🧹 تنظيف Tensor
-        // ========================================
 
         image.dispose();
 
@@ -577,12 +612,7 @@ async function takePhoto() {
             prediction.dispose();
         }
 
-
-        // ========================================
-        // 📖 الحصول على معلومات الأثر
-        // ========================================
-
-        if (!landmarks[className]) {
+        if (!landmarkKey) {
 
             result.innerHTML = `
 
@@ -605,8 +635,7 @@ async function takePhoto() {
             return;
         }
 
-
-        showInfo(className);
+        showInfo(landmarkKey);
 
     } catch (error) {
 
@@ -617,8 +646,10 @@ async function takePhoto() {
 
         result.innerText =
             currentLanguage === "ar"
-                ? "❌ حدث خطأ أثناء التعرف\n\n" + error.message
-                : "❌ An error occurred during recognition\n\n" + error.message;
+                ? "❌ حدث خطأ أثناء التعرف\n\n" +
+                  error.message
+                : "❌ An error occurred during recognition\n\n" +
+                  error.message;
     }
 }
 
@@ -635,7 +666,6 @@ function showInfo(className) {
     const landmark =
         landmarks[className][currentLanguage];
 
-
     if (!landmark) {
 
         result.innerText =
@@ -646,6 +676,51 @@ function showInfo(className) {
         return;
     }
 
+    const titles = {
+
+        ar: {
+            overview: "نبذة تاريخية",
+            story: "القصة",
+            importance: "الأهمية",
+            fact: "معلومة مميزة",
+            listen: "استمع إلى المعلومات",
+            more: "عرض تفاصيل أكثر",
+            source: "المعلومات والمصدر"
+        },
+
+        en: {
+            overview: "Historical Overview",
+            story: "The Story",
+            importance: "Importance",
+            fact: "Interesting Fact",
+            listen: "Listen to the information",
+            more: "View more details",
+            source: "Information & Source"
+        },
+
+        fr: {
+            overview: "Présentation historique",
+            story: "L'histoire",
+            importance: "Importance",
+            fact: "Fait intéressant",
+            listen: "Écouter les informations",
+            more: "Voir plus de détails",
+            source: "Informations et source"
+        },
+
+        es: {
+            overview: "Descripción histórica",
+            story: "La historia",
+            importance: "Importancia",
+            fact: "Dato interesante",
+            listen: "Escuchar la información",
+            more: "Ver más detalles",
+            source: "Información y fuente"
+        }
+    };
+
+    const text =
+        titles[currentLanguage];
 
     result.innerHTML = `
 
@@ -660,83 +735,50 @@ function showInfo(className) {
                 📍 ${landmark.location}
             </p>
 
-
             <hr>
 
-
             <h3>
-                ${
-                    currentLanguage === "ar"
-                        ? "نبذة تاريخية"
-                        : "Historical Overview"
-                }
+                ${text.overview}
             </h3>
 
             <p>
                 ${landmark.description}
             </p>
 
-
             <h3>
-                📖 ${
-                    currentLanguage === "ar"
-                        ? "القصة"
-                        : "The Story"
-                }
+                📖 ${text.story}
             </h3>
 
             <p>
                 ${landmark.story}
             </p>
 
-
             <h3>
-                ⭐ ${
-                    currentLanguage === "ar"
-                        ? "لماذا هذا الأثر مهم؟"
-                        : "Why is it important?"
-                }
+                ⭐ ${text.importance}
             </h3>
 
             <p>
                 ${landmark.importance}
             </p>
 
-
             <h3>
-                💡 ${
-                    currentLanguage === "ar"
-                        ? "معلومة مميزة"
-                        : "Interesting Fact"
-                }
+                💡 ${text.fact}
             </h3>
 
             <p>
                 ${landmark.fact}
             </p>
 
-
             <button
                 onclick="speakAll('${className}')"
             >
-
-                🔊 ${
-                    currentLanguage === "ar"
-                        ? "استمع إلى المعلومات"
-                        : "Listen to the information"
-                }
-
+                🔊 ${text.listen}
             </button>
-
 
             <details>
 
                 <summary>
-                    🔎 ${
-                        currentLanguage === "ar"
-                            ? "عرض تفاصيل أكثر"
-                            : "View more details"
-                    }
+                    🔎 ${text.more}
                 </summary>
 
                 <p>
@@ -747,14 +789,15 @@ function showInfo(className) {
                     href="${landmark.source}"
                     target="_blank"
                     rel="noopener noreferrer"
+                    style="
+                        display:inline-block;
+                        margin-top:12px;
+                        color:#641f35;
+                        font-weight:bold;
+                        text-decoration:none;
+                    "
                 >
-
-                    🌐 ${
-                        currentLanguage === "ar"
-                            ? "المصدر"
-                            : "Source"
-                    }
-
+                    🌐 ${text.source}
                 </a>
 
             </details>
@@ -766,7 +809,7 @@ function showInfo(className) {
 
 
 // ========================================
-// 🔊 السرد الصوتي
+// 🔊 القراءة الصوتية
 // ========================================
 
 function speakAll(className) {
@@ -774,11 +817,14 @@ function speakAll(className) {
     const landmark =
         landmarks[className][currentLanguage];
 
-    if (!landmark) return;
-
+    if (!landmark) {
+        return;
+    }
 
     const text =
         landmark.name +
+        ". " +
+        landmark.location +
         ". " +
         landmark.description +
         " " +
@@ -788,10 +834,8 @@ function speakAll(className) {
         " " +
         landmark.fact;
 
-
     const voice =
         new SpeechSynthesisUtterance(text);
-
 
     const voiceLanguages = {
 
@@ -802,17 +846,13 @@ function speakAll(className) {
 
     };
 
-
     voice.lang =
         voiceLanguages[currentLanguage];
 
     voice.rate = 0.9;
-
     voice.pitch = 1;
 
-
     speechSynthesis.cancel();
-
     speechSynthesis.speak(voice);
 }
 
@@ -828,10 +868,8 @@ function changeLanguage() {
             "language"
         ).value;
 
-
     const result =
         document.getElementById("result");
-
 
     result.innerHTML = `
 
@@ -843,7 +881,11 @@ function changeLanguage() {
             ${
                 currentLanguage === "ar"
                     ? "وجّه الكاميرا نحو أحد الآثار التاريخية ثم اضغط التقاط الأثر."
-                    : "Point your camera at a historical landmark and capture it."
+                    : currentLanguage === "fr"
+                        ? "Pointez la caméra vers un site historique et capturez-le."
+                        : currentLanguage === "es"
+                            ? "Apunta la cámara hacia un sitio histórico y captúralo."
+                            : "Point your camera at a historical landmark and capture it."
             }
         </p>
 
