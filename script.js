@@ -189,21 +189,23 @@ function findLandmarkKey(className) {
     const name = className
         .toUpperCase()
         .trim()
-        .replace(/_/g, "-");
+        .replace(/_/g, "-")
+        .replace(/\s+/g, "-");
 
-    if (name === "AL-MASMAK") {
+    if (name.includes("MASMAK")) {
         return "AL-MASMAK";
     }
 
-    if (name === "AL-HJIR") {
+    if (name.includes("HIJR") || name.includes("HJIR")) {
         return "AL-HIJR";
     }
 
-    if (name === "AL-DIRIYAH") {
+    if (name.includes("DIRIYAH")) {
         return "AL-DIRIYAH";
     }
 
     return null;
+}
 }
 
 
