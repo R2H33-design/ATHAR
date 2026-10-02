@@ -1,8 +1,3 @@
-// ========================================
-// 🏛️ ATHAR - JavaScript
-// AI Landmark Recognition
-// ========================================
-
 let model = null;
 let stream = null;
 let classNames = [];
@@ -10,9 +5,9 @@ let currentLanguage = "ar";
 
 const MODEL_URL = "./";
 
-// ========================================
+// ================================
 // 🌍 اللغات
-// ========================================
+// ================================
 
 const languages = {
     ar: "🇸🇦 العربية",
@@ -21,328 +16,169 @@ const languages = {
     es: "🇪🇸 Español"
 };
 
-// ========================================
-// 🏛️ معلومات الآثار
-// ========================================
+// ================================
+// 🏛️ معلومات المواقع
+// ================================
 
 const landmarks = {
 
-    // ========================================
-    // 🏰 المصمك
-    // ========================================
-
     "AL MASMAK": {
-
         ar: {
             name: "قصر المصمك",
             icon: "🏰",
             location: "الرياض، المملكة العربية السعودية",
-
-            description:
-                "قصر المصمك حصن تاريخي بارز في قلب مدينة الرياض، بُني من الطين واللبن، ويُعد من المعالم المرتبطة بتاريخ تأسيس المملكة العربية السعودية الحديثة.",
-
-            story:
-                "ارتبط قصر المصمك بحدث مهم في التاريخ السعودي؛ ففي عام 1902م استعاد الملك عبدالعزيز مدينة الرياض، وأصبح المصمك شاهدًا على مرحلة مفصلية في تاريخ المملكة.",
-
-            importance:
-                "تكمن أهمية المصمك في ارتباطه بتاريخ الرياض وبدايات توحيد المملكة، كما يعكس تصميمه ومواد بنائه طبيعة العمارة النجدية التقليدية.",
-
-            fact:
-                "يتميز القصر بعناصر دفاعية واضحة، منها الأبراج والجدران السميكة، كما يحتوي على بوابة تاريخية مرتبطة بأحداث استعادة الرياض.",
-
-            details:
-                "يتيح الموقع للزائر التعرف على تاريخ الرياض من خلال المبنى التاريخي والمعروضات والمعلومات التي توضح جوانب من الحياة والتراث في المنطقة.",
-
-            source:
-                "https://www.visitsaudi.com/ar/riyadh/attractions/al-masmak-palace-in-riyadh"
+            description: "قصر تاريخي في قلب مدينة الرياض، ويُعد من أبرز المعالم المرتبطة بتاريخ تأسيس المملكة العربية السعودية.",
+            story: "شهد قصر المصمك أحداثًا مهمة في تاريخ توحيد المملكة، وأصبح اليوم معلمًا تراثيًا يعرّف الزوار بتاريخ الرياض والمملكة.",
+            importance: "يمثل المصمك جزءًا مهمًا من التراث والتاريخ السعودي.",
+            fact: "بُني المصمك من الطين واللبن والحجارة، ويتميز بأبراجه وجدرانه السميكة.",
+            details: "يمكن للزوار التعرف على تاريخ القصر ومشاهدة تفاصيله المعمارية والتراثية.",
+            source: "https://www.visitsaudi.com/ar/riyadh/attractions/al-masmak-palace-in-riyadh"
         },
 
         en: {
             name: "Al Masmak Palace",
             icon: "🏰",
             location: "Riyadh, Saudi Arabia",
-
-            description:
-                "Al Masmak Palace is a historic fortress in the heart of Riyadh. Built mainly from mud and traditional materials, it is closely connected to an important period in the history of modern Saudi Arabia.",
-
-            story:
-                "Al Masmak is associated with a major event in Saudi history. In 1902, King Abdulaziz recaptured Riyadh, and the fortress became a witness to an important stage in the formation and unification of Saudi Arabia.",
-
-            importance:
-                "The palace is important because of its connection to the history of Riyadh and the early stages of Saudi unification. Its design also reflects traditional Najdi architecture.",
-
-            fact:
-                "The fortress features defensive elements such as thick walls and towers, as well as a historic gate associated with the recapture of Riyadh.",
-
-            details:
-                "Today, visitors can explore the historical building, exhibits, and information that present aspects of Riyadh's history and traditional heritage.",
-
-            source:
-                "https://www.visitsaudi.com/en/see-do/destinations/riyadh/al-masmak-palace-in-riyadh"
+            description: "A historic palace in the heart of Riyadh and one of the most important landmarks connected to the history of Saudi Arabia.",
+            story: "Al Masmak witnessed important events in the history of the unification of Saudi Arabia and is now a heritage landmark that introduces visitors to the history of Riyadh and the Kingdom.",
+            importance: "Al Masmak represents an important part of Saudi history and heritage.",
+            fact: "The palace was built using mud, clay and stone, and is known for its thick walls and towers.",
+            details: "Visitors can explore the history of the palace and discover its traditional architectural details.",
+            source: "https://www.visitsaudi.com/en/see-do/destinations/riyadh/al-masmak-palace-in-riyadh"
         },
 
         fr: {
             name: "Palais Al Masmak",
             icon: "🏰",
             location: "Riyad, Arabie saoudite",
-
-            description:
-                "Le palais Al Masmak est une forteresse historique située au cœur de Riyad. Construit principalement avec de la terre et des matériaux traditionnels, il est lié à une période importante de l'histoire de l'Arabie saoudite moderne.",
-
-            story:
-                "Al Masmak est associé à un événement majeur de l'histoire saoudienne. En 1902, le roi Abdulaziz reprit Riyad, et la forteresse devint un témoin d'une étape importante de la formation et de l'unification de l'Arabie saoudite.",
-
-            importance:
-                "Le palais est important en raison de son lien avec l'histoire de Riyad et les premières étapes de l'unification du royaume. Son architecture reflète également le style traditionnel du Najd.",
-
-            fact:
-                "La forteresse possède des éléments défensifs tels que des murs épais et des tours, ainsi qu'une porte historique liée à la reprise de Riyad.",
-
-            details:
-                "Aujourd'hui, les visiteurs peuvent découvrir le bâtiment historique, les expositions et les informations présentant différents aspects de l'histoire et du patrimoine traditionnel de Riyad.",
-
-            source:
-                "https://www.visitsaudi.com/en/see-do/destinations/riyadh/al-masmak-palace-in-riyadh"
+            description: "Un palais historique situé au cœur de Riyad et l'un des monuments les plus importants liés à l'histoire de l'Arabie saoudite.",
+            story: "Al Masmak a été témoin d'événements importants de l'histoire de l'unification de l'Arabie saoudite.",
+            importance: "Al Masmak représente une partie importante du patrimoine et de l'histoire saoudienne.",
+            fact: "Le palais a été construit avec de la boue, de l'argile et de la pierre.",
+            details: "Les visiteurs peuvent découvrir l'histoire du palais et son architecture traditionnelle.",
+            source: "https://www.visitsaudi.com/en/see-do/destinations/riyadh/al-masmak-palace-in-riyadh"
         },
 
         es: {
             name: "Palacio Al Masmak",
             icon: "🏰",
             location: "Riad, Arabia Saudita",
-
-            description:
-                "El Palacio Al Masmak es una fortaleza histórica situada en el corazón de Riad. Construido principalmente con barro y materiales tradicionales, está relacionado con un periodo importante de la historia de la Arabia Saudita moderna.",
-
-            story:
-                "Al Masmak está relacionado con un acontecimiento importante de la historia saudí. En 1902, el rey Abdulaziz recuperó Riad, y la fortaleza se convirtió en testigo de una etapa importante de la formación y unificación de Arabia Saudita.",
-
-            importance:
-                "El palacio es importante por su relación con la historia de Riad y las primeras etapas de la unificación del reino. Su diseño también refleja la arquitectura tradicional de Najd.",
-
-            fact:
-                "La fortaleza cuenta con elementos defensivos como muros gruesos y torres, además de una puerta histórica relacionada con la recuperación de Riad.",
-
-            details:
-                "Hoy, los visitantes pueden conocer el edificio histórico, sus exposiciones y la información relacionada con la historia y el patrimonio tradicional de Riad.",
-
-            source:
-                "https://www.visitsaudi.com/en/see-do/destinations/riyadh/al-masmak-palace-in-riyadh"
+            description: "Un palacio histórico situado en el corazón de Riad y uno de los monumentos más importantes relacionados con la historia de Arabia Saudita.",
+            story: "Al Masmak fue testigo de acontecimientos importantes de la historia de la unificación de Arabia Saudita.",
+            importance: "Al Masmak representa una parte importante del patrimonio y la historia saudí.",
+            fact: "El palacio fue construido con barro, arcilla y piedra.",
+            details: "Los visitantes pueden conocer la historia del palacio y descubrir su arquitectura tradicional.",
+            source: "https://www.visitsaudi.com/en/see-do/destinations/riyadh/al-masmak-palace-in-riyadh"
         }
     },
 
 
-    // ========================================
-    // 🏺 الحِجر
-    // ========================================
-
     "AL HIJR": {
-
         ar: {
             name: "الحِجر",
             icon: "🏜️",
             location: "العلا، المملكة العربية السعودية",
-
-            description:
-                "الحِجر، المعروف أيضًا باسم مدائن صالح، موقع أثري بارز في منطقة العلا، ويشتهر بمقابره ومنشآته المنحوتة في الصخور وسط المناظر الطبيعية الصحراوية.",
-
-            story:
-                "كانت الحِجر محطة مهمة على طرق التجارة القديمة، وازدهرت فيها حضارة الأنباط. وتُظهر المقابر المنحوتة في الصخور مهارة كبيرة في التصميم والنحت والبناء.",
-
-            importance:
-                "تكمن أهمية الحِجر في قيمته التاريخية والأثرية، وفي كونه شاهدًا على تفاعل الحضارات القديمة مع طرق التجارة التي ربطت مناطق مختلفة من العالم.",
-
-            fact:
-                "تضم الحِجر مقابر ضخمة منحوتة مباشرة في الصخور، وتتميز واجهاتها بتفاصيل معمارية دقيقة تعكس مهارة الأنباط.",
-
-            details:
-                "يمنح الموقع الزائر فرصة للتعرف على الحضارة النبطية والطرق التجارية القديمة والعمارة الصخرية، مع مشاهدة آثار محفوظة داخل بيئة طبيعية مميزة في العلا.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/alula"
+            description: "موقع أثري شهير في منطقة العلا، ويُعد من أهم المواقع التاريخية في المملكة العربية السعودية.",
+            story: "يضم الحِجر مقابر ومنشآت منحوتة في الصخور، ويعكس تاريخ الحضارات القديمة التي عاشت في المنطقة.",
+            importance: "يُعد الحِجر أول موقع سعودي أُدرج ضمن قائمة التراث العالمي لليونسكو.",
+            fact: "يشتهر الحِجر بواجهاته الصخرية المنحوتة والمقابر القديمة.",
+            details: "يمكن للزوار استكشاف المواقع الأثرية والمناظر الطبيعية والتعرف على تاريخ المنطقة.",
+            source: "https://www.visitsaudi.com/en/destinations/alula"
         },
 
         en: {
             name: "Hegra",
             icon: "🏜️",
             location: "AlUla, Saudi Arabia",
-
-            description:
-                "Hegra, also known as Mada'in Salih, is a major archaeological site in AlUla, known for its monumental tombs and structures carved directly into the surrounding rock formations.",
-
-            story:
-                "Hegra was an important stop along ancient trade routes and flourished under the Nabataean civilization. Its rock-cut tombs demonstrate remarkable skill in design, carving, and construction.",
-
-            importance:
-                "Hegra is historically and archaeologically significant because it reflects the interaction of ancient civilizations with trade routes connecting different regions.",
-
-            fact:
-                "The site contains monumental tombs carved directly into the rock, with detailed façades that demonstrate the architectural skill of the Nabataeans.",
-
-            details:
-                "Visitors can learn about the Nabataean civilization, ancient trade routes, and rock-cut architecture while exploring a remarkable archaeological landscape in AlUla.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/alula"
+            description: "A famous archaeological site in AlUla and one of the most important historical sites in Saudi Arabia.",
+            story: "Hegra contains ancient tombs and structures carved into the rocks, reflecting the history of civilizations that lived in the region.",
+            importance: "Hegra is the first Saudi site to be listed as a UNESCO World Heritage Site.",
+            fact: "Hegra is famous for its rock-cut facades and ancient tombs.",
+            details: "Visitors can explore archaeological sites, landscapes and learn about the history of the region.",
+            source: "https://www.visitsaudi.com/en/destinations/alula"
         },
 
         fr: {
             name: "Hégra",
             icon: "🏜️",
             location: "AlUla, Arabie saoudite",
-
-            description:
-                "Hégra, également connue sous le nom de Mada'in Salih, est un site archéologique majeur d'AlUla, célèbre pour ses tombes monumentales et ses structures taillées directement dans la roche.",
-
-            story:
-                "Hégra était une étape importante sur les anciennes routes commerciales et s'est développée sous la civilisation nabatéenne. Ses tombes rupestres témoignent d'une grande maîtrise de la conception et de la construction.",
-
-            importance:
-                "Hégra possède une grande importance historique et archéologique, car elle témoigne des échanges entre les civilisations anciennes et les routes commerciales.",
-
-            fact:
-                "Le site comprend des tombes monumentales taillées directement dans la roche, avec des façades richement détaillées.",
-
-            details:
-                "Les visiteurs peuvent découvrir la civilisation nabatéenne, les anciennes routes commerciales et l'architecture rupestre dans le paysage exceptionnel d'AlUla.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/alula"
+            description: "Un célèbre site archéologique d'AlUla et l'un des sites historiques les plus importants d'Arabie saoudite.",
+            story: "Hégra abrite des tombes et des structures anciennes sculptées dans la roche.",
+            importance: "Hégra est le premier site saoudien inscrit au patrimoine mondial de l'UNESCO.",
+            fact: "Hégra est célèbre pour ses façades rocheuses sculptées et ses tombes anciennes.",
+            details: "Les visiteurs peuvent explorer les sites archéologiques et découvrir l'histoire de la région.",
+            source: "https://www.visitsaudi.com/en/destinations/alula"
         },
 
         es: {
             name: "Hegra",
             icon: "🏜️",
             location: "AlUla, Arabia Saudita",
-
-            description:
-                "Hegra, también conocida como Mada'in Salih, es un importante sitio arqueológico de AlUla, famoso por sus tumbas monumentales y estructuras talladas directamente en la roca.",
-
-            story:
-                "Hegra fue una parada importante en las antiguas rutas comerciales y prosperó bajo la civilización nabatea. Sus tumbas excavadas en la roca muestran una notable habilidad arquitectónica.",
-
-            importance:
-                "Hegra tiene una gran importancia histórica y arqueológica porque refleja la interacción entre las antiguas civilizaciones y las rutas comerciales.",
-
-            fact:
-                "El sitio contiene tumbas monumentales talladas directamente en la roca, con fachadas detalladas que muestran la habilidad de los nabateos.",
-
-            details:
-                "Los visitantes pueden conocer la civilización nabatea, las antiguas rutas comerciales y la arquitectura excavada en la roca mientras exploran el paisaje arqueológico de AlUla.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/alula"
+            description: "Un famoso sitio arqueológico de AlUla y uno de los lugares históricos más importantes de Arabia Saudita.",
+            story: "Hegra contiene tumbas y estructuras antiguas talladas en las rocas.",
+            importance: "Hegra es el primer sitio saudí incluido en la lista del Patrimonio Mundial de la UNESCO.",
+            fact: "Hegra es famosa por sus fachadas rocosas talladas y sus antiguas tumbas.",
+            details: "Los visitantes pueden explorar los sitios arqueológicos y conocer la historia de la región.",
+            source: "https://www.visitsaudi.com/en/destinations/alula"
         }
     },
 
 
-    // ========================================
-    // 🏘️ الدرعية
-    // ========================================
-
     "DIRIYAH": {
-
         ar: {
             name: "الدرعية التاريخية",
             icon: "🏘️",
             location: "الرياض، المملكة العربية السعودية",
-
-            description:
-                "الدرعية التاريخية من أبرز المواقع التاريخية في المملكة، وتتميز بالعمارة النجدية التقليدية ومبانيها الطينية وأحيائها التاريخية.",
-
-            story:
-                "كانت الدرعية عاصمة الدولة السعودية الأولى ومركزًا سياسيًا وثقافيًا مهمًا. وارتبطت بتاريخ الدولة السعودية وتطورها، ولا تزال آثارها العمرانية تحكي جانبًا مهمًا من تاريخ المنطقة.",
-
-            importance:
-                "تكتسب الدرعية أهميتها من مكانتها في تاريخ الدولة السعودية ومن تراثها العمراني الذي يعكس أسلوب الحياة والعمارة في منطقة نجد.",
-
-            fact:
-                "تتميز مباني الدرعية التاريخية باستخدام الطين والمواد المحلية، مع تصميمات معمارية تتناسب مع البيئة والمناخ في المنطقة.",
-
-            details:
-                "يمكن للزائر استكشاف الأحياء والمباني التاريخية والتعرف على العمارة النجدية والتراث الثقافي المرتبط بالدرعية وتاريخ الدولة السعودية.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/diriyah"
+            description: "مدينة تاريخية تُعد من أهم المواقع التراثية في المملكة العربية السعودية.",
+            story: "كانت الدرعية عاصمة الدولة السعودية الأولى، وتتميز بمبانيها الطينية وحي الطريف التاريخي.",
+            importance: "تمثل الدرعية جزءًا مهمًا من تاريخ الدولة السعودية وتراثها الثقافي.",
+            fact: "أُدرج حي الطريف في الدرعية ضمن قائمة التراث العالمي لليونسكو.",
+            details: "يمكن للزوار استكشاف المباني التراثية والأحياء التاريخية والتعرف على تاريخ الدرعية.",
+            source: "https://www.visitsaudi.com/en/destinations/diriyah"
         },
 
         en: {
             name: "Historic Diriyah",
             icon: "🏘️",
             location: "Riyadh, Saudi Arabia",
-
-            description:
-                "Historic Diriyah is one of Saudi Arabia's important historical sites, known for its traditional Najdi architecture, mud buildings, and historic neighborhoods.",
-
-            story:
-                "Diriyah was the capital of the First Saudi State and an important political and cultural center. Its history is closely connected to the development of the Saudi state.",
-
-            importance:
-                "Diriyah is significant because of its role in Saudi history and its traditional urban heritage, which reflects life and architecture in the Najd region.",
-
-            fact:
-                "Historic buildings in Diriyah were constructed using mud and locally available materials, with architectural designs adapted to the local environment and climate.",
-
-            details:
-                "Visitors can explore historic neighborhoods and buildings while learning about traditional Najdi architecture, cultural heritage, and the history connected to Diriyah.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/diriyah"
+            description: "A historic city and one of the most important heritage sites in Saudi Arabia.",
+            story: "Diriyah was the capital of the First Saudi State and is known for its traditional mud-brick buildings and At-Turaif district.",
+            importance: "Diriyah represents an important part of Saudi history and cultural heritage.",
+            fact: "The At-Turaif district in Diriyah is listed as a UNESCO World Heritage Site.",
+            details: "Visitors can explore heritage buildings, historic neighborhoods and learn about Diriyah's history.",
+            source: "https://www.visitsaudi.com/en/destinations/diriyah"
         },
 
         fr: {
             name: "Diriyah historique",
             icon: "🏘️",
             location: "Riyad, Arabie saoudite",
-
-            description:
-                "Diriyah historique est l'un des sites historiques importants d'Arabie saoudite. Elle est connue pour son architecture traditionnelle du Najd, ses bâtiments en terre et ses quartiers historiques.",
-
-            story:
-                "Diriyah était la capitale du premier État saoudien et un centre politique et culturel important. Son histoire est étroitement liée au développement de l'État saoudien.",
-
-            importance:
-                "Diriyah est importante en raison de son rôle dans l'histoire saoudienne et de son patrimoine urbain traditionnel qui reflète la vie et l'architecture de la région du Najd.",
-
-            fact:
-                "Les bâtiments historiques de Diriyah ont été construits avec de la terre et des matériaux locaux, selon une architecture adaptée à l'environnement et au climat de la région.",
-
-            details:
-                "Les visiteurs peuvent découvrir les quartiers et bâtiments historiques tout en apprenant davantage sur l'architecture traditionnelle du Najd et le patrimoine culturel de Diriyah.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/diriyah"
+            description: "Une ville historique et l'un des sites patrimoniaux les plus importants d'Arabie saoudite.",
+            story: "Diriyah était la capitale du premier État saoudien et est connue pour ses bâtiments traditionnels en briques de terre.",
+            importance: "Diriyah représente une partie importante de l'histoire et du patrimoine culturel saoudiens.",
+            fact: "Le quartier d'At-Turaif à Diriyah est inscrit au patrimoine mondial de l'UNESCO.",
+            details: "Les visiteurs peuvent explorer les bâtiments historiques et découvrir l'histoire de Diriyah.",
+            source: "https://www.visitsaudi.com/en/destinations/diriyah"
         },
 
         es: {
             name: "Diriyah histórica",
             icon: "🏘️",
             location: "Riad, Arabia Saudita",
-
-            description:
-                "Diriyah histórica es uno de los sitios históricos importantes de Arabia Saudita, conocida por su arquitectura tradicional de Najd, sus edificios de barro y sus barrios históricos.",
-
-            story:
-                "Diriyah fue la capital del Primer Estado Saudí y un importante centro político y cultural. Su historia está estrechamente relacionada con el desarrollo del Estado saudí.",
-
-            importance:
-                "Diriyah es importante por su papel en la historia saudí y por su patrimonio urbano tradicional, que refleja la vida y la arquitectura de la región de Najd.",
-
-            fact:
-                "Los edificios históricos de Diriyah fueron construidos con barro y materiales locales, utilizando diseños adaptados al entorno y al clima de la región.",
-
-            details:
-                "Los visitantes pueden explorar barrios y edificios históricos mientras conocen la arquitectura tradicional de Najd y el patrimonio cultural relacionado con Diriyah.",
-
-            source:
-                "https://www.visitsaudi.com/en/destinations/diriyah"
+            description: "Una ciudad histórica y uno de los sitios patrimoniales más importantes de Arabia Saudita.",
+            story: "Diriyah fue la capital del Primer Estado Saudí y es conocida por sus edificios tradicionales de adobe.",
+            importance: "Diriyah representa una parte importante de la historia y el patrimonio cultural saudí.",
+            fact: "El distrito de At-Turaif en Diriyah está incluido en la lista del Patrimonio Mundial de la UNESCO.",
+            details: "Los visitantes pueden explorar los edificios históricos y conocer la historia de Diriyah.",
+            source: "https://www.visitsaudi.com/en/destinations/diriyah"
         }
     }
 };
 
 
-// ========================================
-// 🔎 مطابقة اسم الأثر
-// ========================================
+// ================================
+// 🔗 مطابقة أسماء الذكاء الاصطناعي
+// ================================
 
 function findLandmarkKey(className) {
 
@@ -350,29 +186,34 @@ function findLandmarkKey(className) {
         return null;
     }
 
-    const cleanName =
-        className
-            .trim()
-            .toUpperCase()
-            .replace(/_/g, " ");
+    const name = className
+        .toUpperCase()
+        .trim()
+        .replace(/_/g, "-");
 
-    const keys =
-        Object.keys(landmarks);
+    if (name === "AL-MASMAK") {
+        return "AL MASMAK";
+    }
 
-    return keys.find(key =>
-        key.trim().toUpperCase() === cleanName
-    ) || null;
+    if (name === "AL-HJIR") {
+        return "AL HIJR";
+    }
+
+    if (name === "AL-DIRIYAH") {
+        return "DIRIYAH";
+    }
+
+    return null;
 }
 
 
-// ========================================
-// 🧠 تحميل نموذج الذكاء الاصطناعي
-// ========================================
+// ================================
+// 🤖 تحميل الذكاء الاصطناعي
+// ================================
 
 async function loadAI() {
 
-    const result =
-        document.getElementById("result");
+    const result = document.getElementById("result");
 
     try {
 
@@ -381,21 +222,17 @@ async function loadAI() {
                 ? "⏳ جاري تحميل الذكاء الاصطناعي..."
                 : "⏳ Loading AI...";
 
-        model =
-            await tf.loadLayersModel(
-                MODEL_URL + "model.json"
-            );
+        model = await tf.loadLayersModel(
+            MODEL_URL + "model.json"
+        );
 
-        const response =
-            await fetch(
-                MODEL_URL + "metadata.json"
-            );
+        const response = await fetch(
+            MODEL_URL + "metadata.json"
+        );
 
-        const metadata =
-            await response.json();
+        const metadata = await response.json();
 
-        classNames =
-            metadata.labels;
+        classNames = metadata.labels;
 
         console.log("MODEL READY");
         console.log("Classes:", classNames);
@@ -407,93 +244,70 @@ async function loadAI() {
 
     } catch (error) {
 
-        console.error(
-            "AI ERROR:",
-            error
-        );
+        console.error(error);
 
         result.innerText =
-            "❌ " +
-            (
-                currentLanguage === "ar"
-                    ? "تعذر تحميل نموذج الذكاء الاصطناعي"
-                    : "AI model could not be loaded"
-            ) +
-            "\n\n" +
-            error.message;
+            currentLanguage === "ar"
+                ? "❌ تعذر تحميل الذكاء الاصطناعي."
+                : "❌ Failed to load AI.";
+
     }
 }
 
 
-// ========================================
-// 📷 تشغيل الكاميرا
-// ========================================
+// ================================
+// 📷 فتح الكاميرا
+// ================================
 
 async function startCamera() {
 
+    const video = document.getElementById("camera");
+    const result = document.getElementById("result");
+
     try {
 
-        const video =
-            document.getElementById("camera");
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: "environment"
+            },
+            audio: false
+        });
 
-        stream =
-            await navigator.mediaDevices.getUserMedia({
-
-                video: {
-                    facingMode: {
-                        ideal: "environment"
-                    }
-                },
-
-                audio: false
-            });
-
-        video.srcObject =
-            stream;
+        video.srcObject = stream;
 
         await video.play();
 
-        const message =
-            document.getElementById(
-                "cameraMessage"
-            );
+        result.innerText =
+            currentLanguage === "ar"
+                ? "📷 الكاميرا جاهزة!"
+                : "📷 Camera is ready!";
 
-        if (message) {
-            message.style.display =
-                "none";
+        if (!model) {
+            await loadAI();
         }
-
-        await loadAI();
 
     } catch (error) {
 
-        console.error(
-            "CAMERA ERROR:",
-            error
-        );
+        console.error(error);
 
-        document.getElementById(
-            "result"
-        ).innerText =
+        result.innerText =
             currentLanguage === "ar"
-                ? "❌ لم نتمكن من تشغيل الكاميرا"
-                : "❌ We could not start the camera.";
+                ? "❌ تعذر تشغيل الكاميرا."
+                : "❌ Could not access the camera.";
+
     }
 }
 
 
-// ========================================
-// 📸 التقاط الصورة + التعرف
-// ========================================
+// ================================
+// 📸 التقاط الصورة والتعرف
+// ================================
 
 async function takePhoto() {
 
-    const result =
-        document.getElementById("result");
-
     if (!model) {
 
-        result.innerText =
+        document.getElementById("result").innerText =
             currentLanguage === "ar"
                 ? "⏳ انتظري حتى يكتمل تحميل الذكاء الاصطناعي."
                 : "⏳ Please wait until the AI finishes loading.";
@@ -501,35 +315,26 @@ async function takePhoto() {
         return;
     }
 
+    const video = document.getElementById("camera");
+    const canvas = document.getElementById("photo");
+    const result = document.getElementById("result");
+
+    if (!video.videoWidth || !video.videoHeight) {
+
+        result.innerText =
+            currentLanguage === "ar"
+                ? "❌ الكاميرا لم تصبح جاهزة بعد."
+                : "❌ The camera is not ready yet.";
+
+        return;
+    }
+
     try {
 
-        const video =
-            document.getElementById("camera");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
 
-        const canvas =
-            document.getElementById("photo");
-
-        if (
-            !video.videoWidth ||
-            !video.videoHeight
-        ) {
-
-            result.innerText =
-                currentLanguage === "ar"
-                    ? "❌ الكاميرا لم تصبح جاهزة بعد."
-                    : "❌ The camera is not ready yet.";
-
-            return;
-        }
-
-        canvas.width =
-            video.videoWidth;
-
-        canvas.height =
-            video.videoHeight;
-
-        const context =
-            canvas.getContext("2d");
+        const context = canvas.getContext("2d");
 
         context.drawImage(
             video,
@@ -539,34 +344,33 @@ async function takePhoto() {
             canvas.height
         );
 
-        result.innerText =
-            currentLanguage === "ar"
-                ? "🔎 جاري التعرف على الأثر..."
-                : "🔎 Identifying the landmark...";
 
-        let image =
-            tf.browser.fromPixels(canvas);
+        // ================================
+        // 🤖 معالجة الصورة
+        // ================================
 
-        image =
-            tf.image.resizeBilinear(
-                image,
-                [224, 224]
-            );
+        let image = tf.browser.fromPixels(canvas);
 
-        image =
-            image
-                .toFloat()
-                .div(127.5)
-                .sub(1);
+        image = tf.image.resizeBilinear(
+            image,
+            [224, 224]
+        );
 
-        image =
-            image.expandDims(0);
+        image = image
+            .toFloat()
+            .div(127.5)
+            .sub(1);
 
-        const prediction =
-            model.predict(image);
+        image = image.expandDims(0);
 
-        const probabilities =
-            await prediction.data();
+
+        // ================================
+        // 🔎 التنبؤ
+        // ================================
+
+        const prediction = model.predict(image);
+
+        const probabilities = await prediction.data();
 
         let bestIndex = 0;
 
@@ -585,11 +389,16 @@ async function takePhoto() {
             }
         }
 
-        const className =
-            classNames[bestIndex];
+
+        // ================================
+        // 🏷️ اسم التصنيف
+        // ================================
+
+        const className = classNames[bestIndex];
 
         const landmarkKey =
             findLandmarkKey(className);
+
 
         console.log(
             "Detected landmark:",
@@ -602,9 +411,14 @@ async function takePhoto() {
         );
 
         console.log(
-            "Probabilities:",
-            probabilities
+            "Confidence:",
+            probabilities[bestIndex]
         );
+
+
+        // ================================
+        // 🧹 تنظيف Tensor
+        // ================================
 
         image.dispose();
 
@@ -612,282 +426,202 @@ async function takePhoto() {
             prediction.dispose();
         }
 
+
+        // ================================
+        // 📍 التحقق من الموقع
+        // ================================
+
         if (!landmarkKey) {
 
-            result.innerHTML = `
-
-                <div class="athar-result">
-
-                    <h2>🏛️ ${className}</h2>
-
-                    <p>
-                        ${
-                            currentLanguage === "ar"
-                                ? "تم التعرف على الأثر، لكن لا توجد معلومات مضافة لهذا الموقع بعد."
-                                : "The landmark was identified, but information has not been added yet."
-                        }
-                    </p>
-
-                </div>
-
-            `;
+            result.innerText =
+                currentLanguage === "ar"
+                    ? "تم التعرف على الأثر، ولكن لم تتم إضافة معلوماته بعد."
+                    : "The landmark was identified, but its information has not been added yet.";
 
             return;
         }
+
+
+        // ================================
+        // 📖 عرض المعلومات
+        // ================================
 
         showInfo(landmarkKey);
 
     } catch (error) {
 
-        console.error(
-            "PREDICTION ERROR:",
-            error
-        );
+        console.error(error);
 
         result.innerText =
             currentLanguage === "ar"
-                ? "❌ حدث خطأ أثناء التعرف\n\n" +
-                  error.message
-                : "❌ An error occurred during recognition\n\n" +
-                  error.message;
+                ? "❌ حدث خطأ أثناء التعرف على الأثر."
+                : "❌ An error occurred while identifying the landmark.";
+
     }
 }
 
 
-// ========================================
-// 📖 عرض معلومات الأثر
-// ========================================
+// ================================
+// 📖 عرض معلومات الموقع
+// ================================
 
-function showInfo(className) {
+function showInfo(landmarkKey) {
 
-    const result =
-        document.getElementById("result");
+    const result = document.getElementById("result");
 
     const landmark =
-        landmarks[className][currentLanguage];
+        landmarks[landmarkKey];
 
     if (!landmark) {
 
         result.innerText =
             currentLanguage === "ar"
-                ? "❌ لا توجد معلومات بهذه اللغة."
-                : "❌ Information is not available in this language.";
+                ? "لا توجد معلومات لهذا الموقع."
+                : "No information is available for this site.";
 
         return;
     }
 
-    const titles = {
+    const info =
+        landmark[currentLanguage] ||
+        landmark.ar;
 
-        ar: {
-            overview: "نبذة تاريخية",
-            story: "القصة",
-            importance: "الأهمية",
-            fact: "معلومة مميزة",
-            listen: "استمع إلى المعلومات",
-            more: "عرض تفاصيل أكثر",
-            source: "المعلومات والمصدر"
-        },
-
-        en: {
-            overview: "Historical Overview",
-            story: "The Story",
-            importance: "Importance",
-            fact: "Interesting Fact",
-            listen: "Listen to the information",
-            more: "View more details",
-            source: "Information & Source"
-        },
-
-        fr: {
-            overview: "Présentation historique",
-            story: "L'histoire",
-            importance: "Importance",
-            fact: "Fait intéressant",
-            listen: "Écouter les informations",
-            more: "Voir plus de détails",
-            source: "Informations et source"
-        },
-
-        es: {
-            overview: "Descripción histórica",
-            story: "La historia",
-            importance: "Importancia",
-            fact: "Dato interesante",
-            listen: "Escuchar la información",
-            more: "Ver más detalles",
-            source: "Información y fuente"
-        }
-    };
-
-    const text =
-        titles[currentLanguage];
 
     result.innerHTML = `
 
-        <div class="athar-result">
+        <div class="landmark-info">
 
             <h2>
-                ${landmark.icon}
-                ${landmark.name}
+                ${info.icon}
+                ${info.name}
             </h2>
 
             <p>
-                📍 ${landmark.location}
+                📍 <strong>
+                ${info.location}
+                </strong>
             </p>
-
-            <hr>
-
-            <h3>
-                ${text.overview}
-            </h3>
 
             <p>
-                ${landmark.description}
+                ${info.description}
             </p>
-
-            <h3>
-                📖 ${text.story}
-            </h3>
 
             <p>
-                ${landmark.story}
+                <strong>
+                ${currentLanguage === "ar" ? "📖 القصة" : "📖 Story"}
+                </strong><br>
+                ${info.story}
             </p>
-
-            <h3>
-                ⭐ ${text.importance}
-            </h3>
 
             <p>
-                ${landmark.importance}
+                <strong>
+                ${currentLanguage === "ar" ? "⭐ الأهمية" : "⭐ Importance"}
+                </strong><br>
+                ${info.importance}
             </p>
-
-            <h3>
-                💡 ${text.fact}
-            </h3>
 
             <p>
-                ${landmark.fact}
+                <strong>
+                ${currentLanguage === "ar" ? "💡 معلومة" : "💡 Fact"}
+                </strong><br>
+                ${info.fact}
             </p>
 
-            <button
-                onclick="speakAll('${className}')"
-            >
-                🔊 ${text.listen}
+            <button onclick="speakAll('${landmarkKey}')">
+                🔊 ${currentLanguage === "ar" ? "استمع للمعلومات" : "Listen"}
             </button>
 
-            <details>
+            <p>
+                ${info.details}
+            </p>
 
-                <summary>
-                    🔎 ${text.more}
-                </summary>
-
-                <p>
-                    ${landmark.details}
-                </p>
-
-                <a
-                    href="${landmark.source}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style="
-                        display:inline-block;
-                        margin-top:12px;
-                        color:#641f35;
-                        font-weight:bold;
-                        text-decoration:none;
-                    "
-                >
-                    🌐 ${text.source}
-                </a>
-
-            </details>
+            <a
+                href="${info.source}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                🌐 ${
+                    currentLanguage === "ar"
+                        ? "عرض تفاصيل أكثر"
+                        : "View more details"
+                }
+            </a>
 
         </div>
-
     `;
 }
 
 
-// ========================================
-// 🔊 القراءة الصوتية
-// ========================================
+// ================================
+// 🔊 قراءة المعلومات صوتيًا
+// ================================
 
-function speakAll(className) {
+function speakAll(landmarkKey) {
 
     const landmark =
-        landmarks[className][currentLanguage];
+        landmarks[landmarkKey];
 
     if (!landmark) {
         return;
     }
 
-    const text =
-        landmark.name +
-        ". " +
-        landmark.location +
-        ". " +
-        landmark.description +
-        " " +
-        landmark.story +
-        " " +
-        landmark.importance +
-        " " +
-        landmark.fact;
+    const info =
+        landmark[currentLanguage] ||
+        landmark.ar;
 
-    const voice =
+    window.speechSynthesis.cancel();
+
+    const text = `
+        ${info.name}.
+        ${info.location}.
+        ${info.description}.
+        ${info.story}.
+        ${info.importance}.
+        ${info.fact}.
+        ${info.details}.
+    `;
+
+    const speech =
         new SpeechSynthesisUtterance(text);
 
-    const voiceLanguages = {
+    if (currentLanguage === "ar") {
+        speech.lang = "ar-SA";
+    }
 
-        ar: "ar-SA",
-        en: "en-US",
-        fr: "fr-FR",
-        es: "es-ES"
+    if (currentLanguage === "en") {
+        speech.lang = "en-US";
+    }
 
-    };
+    if (currentLanguage === "fr") {
+        speech.lang = "fr-FR";
+    }
 
-    voice.lang =
-        voiceLanguages[currentLanguage];
+    if (currentLanguage === "es") {
+        speech.lang = "es-ES";
+    }
 
-    voice.rate = 0.9;
-    voice.pitch = 1;
+    speech.rate = 0.9;
+    speech.pitch = 1;
 
-    speechSynthesis.cancel();
-    speechSynthesis.speak(voice);
+    window.speechSynthesis.speak(speech);
 }
 
 
-// ========================================
+// ================================
 // 🌍 تغيير اللغة
-// ========================================
+// ================================
 
 function changeLanguage() {
 
-    currentLanguage =
-        document.getElementById(
-            "language"
-        ).value;
+    const selector =
+        document.getElementById("language");
 
-    const result =
-        document.getElementById("result");
+    if (selector) {
+        currentLanguage = selector.value;
+    }
 
-    result.innerHTML = `
-
-        <h2>
-            ${languages[currentLanguage]}
-        </h2>
-
-        <p>
-            ${
-                currentLanguage === "ar"
-                    ? "وجّه الكاميرا نحو أحد الآثار التاريخية ثم اضغط التقاط الأثر."
-                    : currentLanguage === "fr"
-                        ? "Pointez la caméra vers un site historique et capturez-le."
-                        : currentLanguage === "es"
-                            ? "Apunta la cámara hacia un sitio histórico y captúralo."
-                            : "Point your camera at a historical landmark and capture it."
-            }
-        </p>
-
-    `;
+    console.log(
+        "Language:",
+        currentLanguage
+    );
 }
