@@ -192,15 +192,15 @@ function findLandmarkKey(className) {
         .replace(/_/g, "-");
 
     if (name === "AL-MASMAK") {
-        return "AL MASMAK";
+        return "AL-MASMAK";
     }
 
     if (name === "AL-HJIR") {
-        return "AL HIJR";
+        return "AL-HIJR";
     }
 
     if (name === "AL-DIRIYAH") {
-        return "DIRIYAH";
+        return "AL-DIRIYAH";
     }
 
     return null;
