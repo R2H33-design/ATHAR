@@ -59,7 +59,7 @@ const landmarks = {
             name: "قصر المصمك",
             icon: "🏰",
             location: "الرياض، المملكة العربية السعودية",
-            description: "قصر تاريخي في قلب مدينة الرياض، ويُعد من أبرز المعالم المرتبطة بتاريخ تأسيس المملكة العربية السعودية.",
+            description: "قصر تاريخي في قلب مدينة الرياض، ويُعد من أبرز المعالم المرتبطة بتاريخ المملكة العربية السعودية.",
             story: "شهد قصر المصمك أحداثًا مهمة في تاريخ توحيد المملكة، وأصبح اليوم معلمًا تراثيًا يعرّف الزوار بتاريخ الرياض والمملكة.",
             importance: "يمثل المصمك جزءًا مهمًا من التراث والتاريخ السعودي.",
             fact: "بُني المصمك من الطين واللبن والحجارة، ويتميز بأبراجه وجدرانه السميكة.",
@@ -162,7 +162,7 @@ const landmarks = {
         ar: {
             name: "الدرعية التاريخية",
             icon: "🏘️",
-            location: "الرياض، المملكة العربية السعودية",
+            location: "الدرعية، منطقة الرياض، المملكة العربية السعودية",
             description: "مدينة تاريخية تُعد من أهم المواقع التراثية في المملكة العربية السعودية.",
             story: "كانت الدرعية عاصمة الدولة السعودية الأولى، وتتميز بمبانيها الطينية وحي الطريف التاريخي.",
             importance: "تمثل الدرعية جزءًا مهمًا من تاريخ الدولة السعودية وتراثها الثقافي.",
@@ -174,7 +174,7 @@ const landmarks = {
         en: {
             name: "Historic Diriyah",
             icon: "🏘️",
-            location: "Riyadh, Saudi Arabia",
+            location: "Diriyah, Riyadh Region, Saudi Arabia",
             description: "A historic city and one of the most important heritage sites in Saudi Arabia.",
             story: "Diriyah was the capital of the First Saudi State and is known for its traditional mud-brick buildings and At-Turaif district.",
             importance: "Diriyah represents an important part of Saudi history and cultural heritage.",
@@ -186,7 +186,7 @@ const landmarks = {
         fr: {
             name: "Diriyah historique",
             icon: "🏘️",
-            location: "Riyad, Arabie saoudite",
+            location: "Diriyah, région de Riyad, Arabie saoudite",
             description: "Une ville historique et l'un des sites patrimoniaux les plus importants d'Arabie saoudite.",
             story: "Diriyah était la capitale du premier État saoudien et est connue pour ses bâtiments traditionnels en briques de terre.",
             importance: "Diriyah représente une partie importante de l'histoire et du patrimoine culturel saoudiens.",
@@ -198,7 +198,7 @@ const landmarks = {
         es: {
             name: "Diriyah histórica",
             icon: "🏘️",
-            location: "Riad, Arabia Saudita",
+            location: "Diriyah, región de Riad, Arabia Saudita",
             description: "Una ciudad histórica y uno de los sitios patrimoniales más importantes de Arabia Saudita.",
             story: "Diriyah fue la capital del Primer Estado Saudí y es conocida por sus edificios tradicionales de adobe.",
             importance: "Diriyah representa una parte importante de la historia y el patrimonio cultural saudí.",
@@ -211,7 +211,7 @@ const landmarks = {
 
 
 // ================================
-// 📍 إحداثيات المواقع
+// 📍 إحداثيات المواقع الأثرية
 // ================================
 
 const landmarkLocations = {
@@ -234,33 +234,119 @@ const landmarkLocations = {
 
 
 // ================================
-// 🏛️ الأماكن التراثية
+// 🛍️ الأماكن القريبة من كل أثر
 // ================================
 
-const heritagePlaces = [
+const nearbyPlacesByLandmark = {
 
-    {
-        name: "قصر المصمك",
-        description: "معلم تراثي تاريخي في وسط الرياض.",
-        lat: 24.63121,
-        lng: 46.71333
-    },
+    "AL-HIJR": [
 
-    {
-        name: "حي الطريف التاريخي",
-        description: "منطقة تاريخية في الدرعية وتضم مباني تراثية ذات طابع نجدي.",
-        lat: 24.73315,
-        lng: 46.57274
-    },
+        {
+            image: "images/alula-old-town-market.jpg",
 
-    {
-        name: "الحِجر",
-        description: "موقع أثري شهير في منطقة العلا.",
-        lat: 26.7915,
-        lng: 37.9575
-    }
+            ar: {
+                name: "سوق البلدة القديمة",
+                description:
+                    "سوق تراثي في البلدة القديمة بالعلا، يضم الحرف اليدوية والهدايا التذكارية والمتاجر والمقاهي والأطعمة المحلية."
+            },
 
-];
+            en: {
+                name: "Old Town Market Street",
+                description:
+                    "A heritage market in AlUla Old Town featuring local handicrafts, souvenirs, shops, cafés and local food."
+            },
+
+            fr: {
+                name: "Marché de la vieille ville",
+                description:
+                    "Un marché patrimonial dans la vieille ville d'AlUla avec de l'artisanat local, des souvenirs, des boutiques et des cafés."
+            },
+
+            es: {
+                name: "Mercado de la Ciudad Antigua",
+                description:
+                    "Un mercado tradicional en la Ciudad Antigua de AlUla con artesanías locales, recuerdos, tiendas y cafeterías."
+            },
+
+            lat: 26.6278647,
+            lng: 37.9128202
+        }
+
+    ],
+
+
+    "AL-MASMAK": [
+
+        {
+            image: "images/riyadh-traditional-market.jpg",
+
+            ar: {
+                name: "سوق الزل",
+                description:
+                    "سوق شعبي تراثي في الرياض يشتهر بالمنتجات التقليدية والحرف والأجواء الشعبية."
+            },
+
+            en: {
+                name: "Souq Al-Zal",
+                description:
+                    "A traditional market in Riyadh known for heritage products, crafts and a traditional atmosphere."
+            },
+
+            fr: {
+                name: "Souq Al-Zal",
+                description:
+                    "Un marché traditionnel de Riyad connu pour ses produits patrimoniaux, son artisanat et son ambiance traditionnelle."
+            },
+
+            es: {
+                name: "Souq Al-Zal",
+                description:
+                    "Un mercado tradicional de Riad conocido por sus productos patrimoniales, artesanías y ambiente tradicional."
+            },
+
+            lat: 24.63121,
+            lng: 46.71333
+        }
+
+    ],
+
+
+    "AL-DIRIYAH": [
+
+        {
+            image: "images/diriyah-market.jpg",
+
+            ar: {
+                name: "منطقة الدرعية التراثية",
+                description:
+                    "منطقة تراثية في الدرعية يمكن للزوار فيها استكشاف المنتجات والحرف والأجواء النجدية."
+            },
+
+            en: {
+                name: "Diriyah Heritage Area",
+                description:
+                    "A heritage area in Diriyah where visitors can explore local products, crafts and traditional Najdi atmosphere."
+            },
+
+            fr: {
+                name: "Zone patrimoniale de Diriyah",
+                description:
+                    "Une zone patrimoniale de Diriyah où les visiteurs peuvent découvrir les produits, l'artisanat et l'ambiance traditionnelle du Najd."
+            },
+
+            es: {
+                name: "Zona patrimonial de Diriyah",
+                description:
+                    "Una zona patrimonial de Diriyah donde los visitantes pueden descubrir productos, artesanías y el ambiente tradicional del Najd."
+            },
+
+            lat: 24.73315,
+            lng: 46.57274
+        }
+
+    ]
+
+};
 
 
 // ================================
@@ -392,10 +478,10 @@ async function startCamera() {
     try {
 
         result.innerText =
-            "⏳ جاري تشغيل الكاميرا...";
+            currentLanguage === "ar"
+                ? "⏳ جاري تشغيل الكاميرا..."
+                : "⏳ Starting camera...";
 
-
-        // إيقاف أي كاميرا قديمة
 
         if (stream) {
 
@@ -406,8 +492,6 @@ async function startCamera() {
             stream = null;
         }
 
-
-        // طلب الكاميرا
 
         stream =
             await navigator.mediaDevices.getUserMedia({
@@ -431,9 +515,7 @@ async function startCamera() {
             });
 
 
-        console.log(
-            "CAMERA STREAM READY"
-        );
+        console.log("CAMERA STREAM READY");
 
 
         video.srcObject =
@@ -468,7 +550,9 @@ async function startCamera() {
         if (message) {
 
             message.innerHTML =
-                "📷 الكاميرا تعمل الآن";
+                currentLanguage === "ar"
+                    ? "📷 الكاميرا تعمل الآن"
+                    : "📷 Camera is working";
 
         }
 
@@ -478,8 +562,6 @@ async function startCamera() {
                 ? "📷 الكاميرا جاهزة!"
                 : "📷 Camera is ready!";
 
-
-        // تحميل AI بعد تشغيل الكاميرا
 
         if (!model) {
             await loadAI();
@@ -495,29 +577,38 @@ async function startCamera() {
 
 
         let message =
-            "❌ تعذر تشغيل الكاميرا.";
+            currentLanguage === "ar"
+                ? "❌ تعذر تشغيل الكاميرا."
+                : "❌ Could not access the camera.";
 
 
         if (error.name === "NotAllowedError") {
 
             message =
-                "❌ تم رفض صلاحية الكاميرا. تأكدي من السماح للكاميرا لهذا الموقع.";
+                currentLanguage === "ar"
+                    ? "❌ تم رفض صلاحية الكاميرا. تأكدي من السماح للكاميرا لهذا الموقع."
+                    : "❌ Camera permission was denied.";
 
         } else if (error.name === "NotFoundError") {
 
             message =
-                "❌ لم يتم العثور على كاميرا.";
+                currentLanguage === "ar"
+                    ? "❌ لم يتم العثور على كاميرا."
+                    : "❌ No camera was found.";
 
         } else if (error.name === "NotReadableError") {
 
             message =
-                "❌ الكاميرا مستخدمة من تطبيق آخر.";
+                currentLanguage === "ar"
+                    ? "❌ الكاميرا مستخدمة من تطبيق آخر."
+                    : "❌ The camera is being used by another app.";
 
         } else if (error.name === "SecurityError") {
 
             message =
-                "❌ المتصفح منع الوصول إلى الكاميرا.";
-
+                currentLanguage === "ar"
+                    ? "❌ المتصفح منع الوصول إلى الكاميرا."
+                    : "❌ The browser blocked camera access.";
         }
 
 
@@ -776,12 +867,15 @@ function showInfo(landmarkKey) {
             </p>
 
             <p>
-
                 <strong>
                     ${
                         currentLanguage === "ar"
                             ? "📖 القصة"
-                            : "📖 Story"
+                            : currentLanguage === "en"
+                                ? "📖 Story"
+                                : currentLanguage === "fr"
+                                    ? "📖 Histoire"
+                                    : "📖 Historia"
                     }
                 </strong>
 
@@ -792,12 +886,15 @@ function showInfo(landmarkKey) {
             </p>
 
             <p>
-
                 <strong>
                     ${
                         currentLanguage === "ar"
                             ? "⭐ الأهمية"
-                            : "⭐ Importance"
+                            : currentLanguage === "en"
+                                ? "⭐ Importance"
+                                : currentLanguage === "fr"
+                                    ? "⭐ Importance"
+                                    : "⭐ Importancia"
                     }
                 </strong>
 
@@ -808,12 +905,15 @@ function showInfo(landmarkKey) {
             </p>
 
             <p>
-
                 <strong>
                     ${
                         currentLanguage === "ar"
                             ? "💡 معلومة"
-                            : "💡 Fact"
+                            : currentLanguage === "en"
+                                ? "💡 Fact"
+                                : currentLanguage === "fr"
+                                    ? "💡 Fait"
+                                    : "💡 Dato"
                     }
                 </strong>
 
@@ -830,7 +930,11 @@ function showInfo(landmarkKey) {
                 ${
                     currentLanguage === "ar"
                         ? "استمع للمعلومات"
-                        : "Listen"
+                        : currentLanguage === "en"
+                            ? "Listen"
+                            : currentLanguage === "fr"
+                                ? "Écouter"
+                                : "Escuchar"
                 }
             </button>
 
@@ -847,12 +951,19 @@ function showInfo(landmarkKey) {
                 ${
                     currentLanguage === "ar"
                         ? "عرض تفاصيل أكثر"
-                        : "View more details"
+                        : currentLanguage === "en"
+                            ? "View more details"
+                            : currentLanguage === "fr"
+                                ? "Voir plus de détails"
+                                : "Ver más detalles"
                 }
             </a>
 
         </div>
     `;
+
+    // عرض الأماكن القريبة من الأثر الذي تم اكتشافه
+    renderNearbyPlaces(landmarkKey);
 }
 
 
@@ -970,6 +1081,7 @@ function saveDiscovered(landmarkKey) {
 
 
     renderDiscovered();
+    renderRemaining();
 
 
     if (map) {
@@ -979,7 +1091,7 @@ function saveDiscovered(landmarkKey) {
 
 
 // ================================
-// ⭐ عرض المكتشفات
+// ⭐ المواقع المكتشفة
 // ================================
 
 function renderDiscovered() {
@@ -1000,7 +1112,11 @@ function renderDiscovered() {
         container.innerHTML =
             currentLanguage === "ar"
                 ? "لم تكتشفي أي موقع بعد."
-                : "No discovered landmarks yet.";
+                : currentLanguage === "en"
+                    ? "No discovered landmarks yet."
+                    : currentLanguage === "fr"
+                        ? "Aucun site découvert."
+                        : "Aún no hay sitios descubiertos.";
 
         return;
     }
@@ -1050,6 +1166,174 @@ function renderDiscovered() {
 
 
 // ================================
+// 🧭 المواقع المتبقية للاستكشاف
+// ================================
+
+function renderRemaining() {
+
+    const container =
+        document.getElementById(
+            "remainingPlaces"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const allKeys = [
+        "AL-MASMAK",
+        "AL-HIJR",
+        "AL-DIRIYAH"
+    ];
+
+
+    const remaining =
+        allKeys.filter(
+            key =>
+                !discovered.some(
+                    item => item.key === key
+                )
+        );
+
+
+    if (remaining.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="remaining-complete">
+
+                🎉
+
+                ${
+                    currentLanguage === "ar"
+                        ? "اكتشفتِ جميع المواقع!"
+                        : currentLanguage === "en"
+                            ? "You discovered all landmarks!"
+                            : currentLanguage === "fr"
+                                ? "Vous avez découvert tous les sites !"
+                                : "¡Has descubierto todos los sitios!"
+                }
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        remaining.map(
+            function(key) {
+
+                const info =
+                    landmarks[key][currentLanguage] ||
+                    landmarks[key].ar;
+
+                const location =
+                    landmarkLocations[key];
+
+
+                return `
+
+                    <div class="remaining-item">
+
+                        <div class="remaining-icon">
+                            ${info.icon}
+                        </div>
+
+                        <div class="remaining-info">
+
+                            <strong>
+                                ${info.name}
+                            </strong>
+
+                            <span>
+                                📍 ${info.location}
+                            </span>
+
+                        </div>
+
+                        <button
+                            onclick="
+                                openLandmarkOnMap(
+                                    '${key}'
+                                )
+                            "
+                        >
+                            📍
+                            ${
+                                currentLanguage === "ar"
+                                    ? "الموقع"
+                                    : currentLanguage === "en"
+                                        ? "Location"
+                                        : currentLanguage === "fr"
+                                            ? "Emplacement"
+                                            : "Ubicación"
+                            }
+                        </button>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+}
+
+
+// ================================
+// 📍 فتح موقع أثر على الخريطة
+// ================================
+
+function openLandmarkOnMap(landmarkKey) {
+
+    const location =
+        landmarkLocations[landmarkKey];
+
+
+    if (!location) {
+        return;
+    }
+
+
+    if (!map) {
+        initMap();
+    }
+
+
+    if (!map) {
+        return;
+    }
+
+
+    map.setView(
+        [
+            location.lat,
+            location.lng
+        ],
+        16
+    );
+
+
+    const element =
+        document.getElementById("map");
+
+
+    if (element) {
+
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    }
+}
+
+
+// ================================
 // 🗺️ فتح الخريطة
 // ================================
 
@@ -1069,7 +1353,9 @@ function openExplore() {
         if (typeof L === "undefined") {
 
             alert(
-                "❌ لم يتم تحميل الخريطة."
+                currentLanguage === "ar"
+                    ? "❌ لم يتم تحميل الخريطة."
+                    : "❌ Map could not be loaded."
             );
 
             return;
@@ -1132,89 +1418,27 @@ function initMap() {
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 
         {
-
             maxZoom: 19,
 
             attribution:
                 '&copy; OpenStreetMap contributors'
-
         }
 
     ).addTo(map);
 
 
-    addHeritageMarkers();
-
     updateMapMarkers();
 
     renderDiscovered();
+
+    renderRemaining();
 
     renderNearbyPlaces();
 }
 
 
 // ================================
-// 🏛️ العلامات التراثية
-// ================================
-
-function addHeritageMarkers() {
-
-    if (!map) {
-        return;
-    }
-
-
-    heritagePlaces.forEach(
-        function(place) {
-
-            const marker =
-                L.marker([
-                    place.lat,
-                    place.lng
-                ]).addTo(map);
-
-
-            marker.bindPopup(`
-
-                <div style="text-align:center">
-
-                    <strong>
-                        🏛️ ${place.name}
-                    </strong>
-
-                    <br><br>
-
-                    <span>
-                        ${place.description}
-                    </span>
-
-                    <br><br>
-
-                    <button
-                        onclick="goToPlace(
-                            ${place.lat},
-                            ${place.lng}
-                        )"
-                        style="
-                            margin:0;
-                            padding:8px;
-                            font-size:13px;
-                        "
-                    >
-                        📍 اذهب إلى الموقع
-                    </button>
-
-                </div>
-
-            `);
-
-        }
-    );
-}
-
-
-// ================================
-// ⭐ علامات المكتشفات
+// ⭐ علامات المواقع المكتشفة
 // ================================
 
 function updateMapMarkers() {
@@ -1274,22 +1498,41 @@ function updateMapMarkers() {
 
                     <br><br>
 
-                    تم اكتشاف هذا الموقع
+                    ${
+                        currentLanguage === "ar"
+                            ? "تم اكتشاف هذا الموقع"
+                            : currentLanguage === "en"
+                                ? "This landmark has been discovered"
+                                : currentLanguage === "fr"
+                                    ? "Ce site a été découvert"
+                                    : "Este sitio ha sido descubierto"
+                    }
 
                     <br><br>
 
                     <button
-                        onclick="goToPlace(
-                            ${location.lat},
-                            ${location.lng}
-                        )"
+                        onclick="
+                            goToPlace(
+                                ${location.lat},
+                                ${location.lng}
+                            )
+                        "
                         style="
                             margin:0;
                             padding:8px;
                             font-size:13px;
                         "
                     >
-                        📍 اذهب إلى الموقع
+                        📍
+                        ${
+                            currentLanguage === "ar"
+                                ? "اذهب إلى الموقع"
+                                : currentLanguage === "en"
+                                    ? "Go to location"
+                                    : currentLanguage === "fr"
+                                        ? "Voir l'emplacement"
+                                        : "Ir a la ubicación"
+                        }
                     </button>
 
                 </div>
@@ -1315,7 +1558,9 @@ function locateUser() {
     if (!navigator.geolocation) {
 
         alert(
-            "❌ المتصفح لا يدعم تحديد الموقع."
+            currentLanguage === "ar"
+                ? "❌ المتصفح لا يدعم تحديد الموقع."
+                : "❌ Geolocation is not supported."
         );
 
         return;
@@ -1354,9 +1599,15 @@ function locateUser() {
 
 
             userMarker.bindPopup(
+
                 currentLanguage === "ar"
                     ? "📍 موقعك الحالي"
-                    : "📍 Your current location"
+                    : currentLanguage === "en"
+                        ? "📍 Your current location"
+                        : currentLanguage === "fr"
+                            ? "📍 Votre position actuelle"
+                            : "📍 Tu ubicación actual"
+
             );
 
 
@@ -1379,7 +1630,9 @@ function locateUser() {
 
 
             alert(
-                "❌ تعذر تحديد موقعك. تأكدي من السماح للموقع."
+                currentLanguage === "ar"
+                    ? "❌ تعذر تحديد موقعك. تأكدي من السماح للموقع."
+                    : "❌ Could not determine your location."
             );
         },
 
@@ -1416,10 +1669,10 @@ function goToPlace(lat, lng) {
 
 
 // ================================
-// 🏛️ الأماكن
+// 🛍️ عرض الأماكن القريبة
 // ================================
 
-function renderNearbyPlaces() {
+function renderNearbyPlaces(landmarkKey) {
 
     const container =
         document.getElementById(
@@ -1432,20 +1685,55 @@ function renderNearbyPlaces() {
     }
 
 
+    const places =
+        nearbyPlacesByLandmark[landmarkKey] || [];
+
+
+    if (places.length === 0) {
+
+        container.innerHTML =
+            currentLanguage === "ar"
+                ? "لا توجد أماكن قريبة مضافة لهذا الموقع."
+                : currentLanguage === "en"
+                    ? "No nearby places have been added for this landmark."
+                    : currentLanguage === "fr"
+                        ? "Aucun lieu à proximité n'a été ajouté."
+                        : "No se han añadido lugares cercanos.";
+
+        return;
+    }
+
+
     container.innerHTML =
-        heritagePlaces.map(
+        places.map(
             function(place) {
+
+                const info =
+                    place[currentLanguage] ||
+                    place.ar;
+
 
                 return `
 
                     <div class="place-card">
 
+                        <img
+                            src="${place.image}"
+                            alt="${info.name}"
+                            style="
+                                width:100%;
+                                height:180px;
+                                object-fit:cover;
+                                border-radius:14px;
+                            "
+                        >
+
                         <h3>
-                            🏛️ ${place.name}
+                            🛍️ ${info.name}
                         </h3>
 
                         <p>
-                            ${place.description}
+                            ${info.description}
                         </p>
 
                         <button
@@ -1456,7 +1744,16 @@ function renderNearbyPlaces() {
                                 )
                             "
                         >
-                            📍 اذهب إلى الموقع
+                            📍
+                            ${
+                                currentLanguage === "ar"
+                                    ? "اذهب إلى الموقع"
+                                    : currentLanguage === "en"
+                                        ? "Go to location"
+                                        : currentLanguage === "fr"
+                                            ? "Voir l'emplacement"
+                                            : "Ir a la ubicación"
+                            }
                         </button>
 
                     </div>
@@ -1490,9 +1787,13 @@ function changeLanguage() {
 
     renderDiscovered();
 
+    renderRemaining();
+
 
     if (map) {
+
         updateMapMarkers();
+
     }
 }
 
@@ -1558,7 +1859,53 @@ document.addEventListener(
         }
 
 
+        const exploreButton =
+            document.getElementById(
+                "exploreButton"
+            );
+
+
+        if (exploreButton) {
+
+            exploreButton.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    openExplore();
+
+                }
+            );
+
+        }
+
+
+        const locateButton =
+            document.getElementById(
+                "locateButton"
+            );
+
+
+        if (locateButton) {
+
+            locateButton.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    locateUser();
+
+                }
+            );
+
+        }
+
+
         renderDiscovered();
+
+        renderRemaining();
 
     }
 );
