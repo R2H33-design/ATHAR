@@ -18,9 +18,21 @@ let landmarkMarkers = [];
 // ⭐ المواقع المكتشفة
 // ================================
 
-let discovered = JSON.parse(
-    localStorage.getItem("atharDiscovered") || "[]"
-);
+let discovered = [];
+
+try {
+    discovered = JSON.parse(
+        localStorage.getItem("atharDiscovered") || "[]"
+    );
+
+    if (!Array.isArray(discovered)) {
+        discovered = [];
+    }
+
+} catch (error) {
+    console.log("LocalStorage error:", error);
+    discovered = [];
+}
 
 
 // ================================
@@ -222,7 +234,7 @@ const landmarkLocations = {
 
 
 // ================================
-// 🏛️ أماكن تراثية إضافية
+// 🏛️ الأماكن التراثية
 // ================================
 
 const heritagePlaces = [
@@ -252,7 +264,7 @@ const heritagePlaces = [
 
 
 // ================================
-// 🔗 مطابقة أسماء الذكاء الاصطناعي
+// 🔗 مطابقة أسماء AI
 // ================================
 
 function findLandmarkKey(className) {
@@ -287,7 +299,7 @@ function findLandmarkKey(className) {
 
 
 // ================================
-// 🤖 تحميل الذكاء الاصطناعي
+// 🤖 تحميل AI
 // ================================
 
 async function loadAI() {
@@ -302,43 +314,31 @@ async function loadAI() {
                 ? "⏳ جاري تحميل الذكاء الاصطناعي..."
                 : "⏳ Loading AI...";
 
-
         model = await tf.loadLayersModel(
             MODEL_URL + "model.json"
         );
-
 
         const response = await fetch(
             MODEL_URL + "metadata.json"
         );
 
-
         const metadata =
             await response.json();
-
 
         classNames =
             metadata.labels;
 
-
         console.log("MODEL READY");
-
-        console.log(
-            "Classes:",
-            classNames
-        );
-
+        console.log("Classes:", classNames);
 
         result.innerText =
             currentLanguage === "ar"
                 ? "✅ الذكاء الاصطناعي جاهز!"
                 : "✅ AI is ready!";
 
-
     } catch (error) {
 
-        console.error(error);
-
+        console.error("AI ERROR:", error);
 
         result.innerText =
             currentLanguage === "ar"
@@ -360,25 +360,117 @@ async function startCamera() {
     const result =
         document.getElementById("result");
 
+    console.log("CAMERA BUTTON PRESSED");
+
+
+    if (!video) {
+
+        alert("❌ لم يتم العثور على عنصر الكاميرا.");
+
+        return;
+    }
+
+
+    if (!navigator.mediaDevices) {
+
+        result.innerText =
+            "❌ المتصفح لا يدعم تشغيل الكاميرا.";
+
+        return;
+    }
+
+
+    if (!navigator.mediaDevices.getUserMedia) {
+
+        result.innerText =
+            "❌ تشغيل الكاميرا غير متاح في هذا المتصفح.";
+
+        return;
+    }
+
 
     try {
+
+        result.innerText =
+            "⏳ جاري تشغيل الكاميرا...";
+
+
+        // إيقاف أي كاميرا قديمة
+
+        if (stream) {
+
+            stream.getTracks().forEach(
+                track => track.stop()
+            );
+
+            stream = null;
+        }
+
+
+        // طلب الكاميرا
 
         stream =
             await navigator.mediaDevices.getUserMedia({
 
                 video: {
-                    facingMode: "environment"
+                    facingMode: {
+                        ideal: "environment"
+                    },
+
+                    width: {
+                        ideal: 1280
+                    },
+
+                    height: {
+                        ideal: 720
+                    }
                 },
 
                 audio: false
+
             });
+
+
+        console.log(
+            "CAMERA STREAM READY"
+        );
 
 
         video.srcObject =
             stream;
 
 
-        await video.play();
+        video.muted = true;
+        video.playsInline = true;
+        video.autoplay = true;
+
+
+        try {
+
+            await video.play();
+
+        } catch (playError) {
+
+            console.log(
+                "Video play error:",
+                playError
+            );
+
+        }
+
+
+        const message =
+            document.getElementById(
+                "cameraMessage"
+            );
+
+
+        if (message) {
+
+            message.innerHTML =
+                "📷 الكاميرا تعمل الآن";
+
+        }
 
 
         result.innerText =
@@ -387,6 +479,8 @@ async function startCamera() {
                 : "📷 Camera is ready!";
 
 
+        // تحميل AI بعد تشغيل الكاميرا
+
         if (!model) {
             await loadAI();
         }
@@ -394,26 +488,56 @@ async function startCamera() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "CAMERA ERROR:",
+            error
+        );
+
+
+        let message =
+            "❌ تعذر تشغيل الكاميرا.";
+
+
+        if (error.name === "NotAllowedError") {
+
+            message =
+                "❌ تم رفض صلاحية الكاميرا. تأكدي من السماح للكاميرا لهذا الموقع.";
+
+        } else if (error.name === "NotFoundError") {
+
+            message =
+                "❌ لم يتم العثور على كاميرا.";
+
+        } else if (error.name === "NotReadableError") {
+
+            message =
+                "❌ الكاميرا مستخدمة من تطبيق آخر.";
+
+        } else if (error.name === "SecurityError") {
+
+            message =
+                "❌ المتصفح منع الوصول إلى الكاميرا.";
+
+        }
 
 
         result.innerText =
-            currentLanguage === "ar"
-                ? "❌ تعذر تشغيل الكاميرا."
-                : "❌ Could not access the camera.";
+            message;
     }
 }
 
 
 // ================================
-// 📸 التقاط الصورة والتعرف
+// 📸 التقاط الصورة
 // ================================
 
 async function takePhoto() {
 
     if (!model) {
 
-        document.getElementById("result").innerText =
+        document.getElementById(
+            "result"
+        ).innerText =
 
             currentLanguage === "ar"
                 ? "⏳ انتظري حتى يكتمل تحميل الذكاء الاصطناعي."
@@ -434,6 +558,7 @@ async function takePhoto() {
 
 
     if (
+        !video ||
         !video.videoWidth ||
         !video.videoHeight
     ) {
@@ -471,7 +596,8 @@ async function takePhoto() {
 
 
         // ================================
-        // 🤖 AI CODE - بدون تغيير
+        // 🤖 AI CODE
+        // لم يتم تغيير طريقة النموذج
         // ================================
 
         let image =
@@ -571,19 +697,22 @@ async function takePhoto() {
         }
 
 
-        // ⭐ حفظ الموقع كموقع مكتشف
+        saveDiscovered(
+            landmarkKey
+        );
 
-        saveDiscovered(landmarkKey);
 
-
-        // عرض معلومات الموقع
-
-        showInfo(landmarkKey);
+        showInfo(
+            landmarkKey
+        );
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "PREDICTION ERROR:",
+            error
+        );
 
 
         result.innerText =
@@ -598,14 +727,13 @@ async function takePhoto() {
 
 
 // ================================
-// 🏛️ عرض معلومات الموقع
+// 🏛️ عرض المعلومات
 // ================================
 
 function showInfo(landmarkKey) {
 
     const result =
         document.getElementById("result");
-
 
     const landmark =
         landmarks[landmarkKey];
@@ -614,11 +742,8 @@ function showInfo(landmarkKey) {
     if (!landmark) {
 
         result.innerText =
-
             currentLanguage === "ar"
-
                 ? "لا توجد معلومات لهذا الموقع."
-
                 : "No information is available for this site.";
 
         return;
@@ -639,7 +764,6 @@ function showInfo(landmarkKey) {
                 ${info.name}
             </h2>
 
-
             <p>
                 📍
                 <strong>
@@ -647,11 +771,9 @@ function showInfo(landmarkKey) {
                 </strong>
             </p>
 
-
             <p>
                 ${info.description}
             </p>
-
 
             <p>
 
@@ -669,7 +791,6 @@ function showInfo(landmarkKey) {
 
             </p>
 
-
             <p>
 
                 <strong>
@@ -685,7 +806,6 @@ function showInfo(landmarkKey) {
                 ${info.importance}
 
             </p>
-
 
             <p>
 
@@ -703,39 +823,32 @@ function showInfo(landmarkKey) {
 
             </p>
 
-
             <button
                 onclick="speakAll('${landmarkKey}')"
             >
-
                 🔊
                 ${
                     currentLanguage === "ar"
                         ? "استمع للمعلومات"
                         : "Listen"
                 }
-
             </button>
-
 
             <p>
                 ${info.details}
             </p>
-
 
             <a
                 href="${info.source}"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-
                 🌐
                 ${
                     currentLanguage === "ar"
                         ? "عرض تفاصيل أكثر"
                         : "View more details"
                 }
-
             </a>
 
         </div>
@@ -744,7 +857,7 @@ function showInfo(landmarkKey) {
 
 
 // ================================
-// 🔊 قراءة المعلومات صوتيًا
+// 🔊 الصوت
 // ================================
 
 function speakAll(landmarkKey) {
@@ -767,7 +880,6 @@ function speakAll(landmarkKey) {
 
 
     const text = `
-
         ${info.name}.
         ${info.location}.
         ${info.description}.
@@ -775,7 +887,6 @@ function speakAll(landmarkKey) {
         ${info.importance}.
         ${info.fact}.
         ${info.details}.
-
     `;
 
 
@@ -787,16 +898,13 @@ function speakAll(landmarkKey) {
         speech.lang = "ar-SA";
     }
 
-
     if (currentLanguage === "en") {
         speech.lang = "en-US";
     }
 
-
     if (currentLanguage === "fr") {
         speech.lang = "fr-FR";
     }
-
 
     if (currentLanguage === "es") {
         speech.lang = "es-ES";
@@ -804,7 +912,6 @@ function speakAll(landmarkKey) {
 
 
     speech.rate = 0.9;
-
     speech.pitch = 1;
 
 
@@ -815,7 +922,7 @@ function speakAll(landmarkKey) {
 
 
 // ================================
-// ⭐ حفظ موقع مكتشف
+// ⭐ حفظ الموقع
 // ================================
 
 function saveDiscovered(landmarkKey) {
@@ -831,41 +938,48 @@ function saveDiscovered(landmarkKey) {
         );
 
 
-    if (alreadyDiscovered) {
+    if (!alreadyDiscovered) {
 
-        renderDiscovered();
+        discovered.push({
 
-        updateMapMarkers();
+            key: landmarkKey,
 
-        return;
+            date:
+                new Date().toLocaleDateString(
+                    "ar-SA"
+                )
+
+        });
+
+
+        try {
+
+            localStorage.setItem(
+                "atharDiscovered",
+                JSON.stringify(discovered)
+            );
+
+        } catch (error) {
+
+            console.log(
+                "Save error:",
+                error
+            );
+        }
     }
-
-
-    discovered.push({
-
-        key: landmarkKey,
-
-        date:
-            new Date().toLocaleDateString(
-                "ar-SA"
-            )
-    });
-
-
-    localStorage.setItem(
-        "atharDiscovered",
-        JSON.stringify(discovered)
-    );
 
 
     renderDiscovered();
 
-    updateMapMarkers();
+
+    if (map) {
+        updateMapMarkers();
+    }
 }
 
 
 // ================================
-// ⭐ عرض المواقع المكتشفة
+// ⭐ عرض المكتشفات
 // ================================
 
 function renderDiscovered() {
@@ -885,9 +999,7 @@ function renderDiscovered() {
 
         container.innerHTML =
             currentLanguage === "ar"
-
                 ? "لم تكتشفي أي موقع بعد."
-
                 : "No discovered landmarks yet.";
 
         return;
@@ -899,6 +1011,11 @@ function renderDiscovered() {
 
             const landmark =
                 landmarks[item.key];
+
+
+            if (!landmark) {
+                return "";
+            }
 
 
             const info =
@@ -913,7 +1030,6 @@ function renderDiscovered() {
                     <div class="discovered-star">
                         ⭐
                     </div>
-
 
                     <div class="discovered-name">
 
@@ -949,6 +1065,17 @@ function openExplore() {
 
 
     if (!map) {
+
+        if (typeof L === "undefined") {
+
+            alert(
+                "❌ لم يتم تحميل الخريطة."
+            );
+
+            return;
+        }
+
+
         initMap();
     }
 
@@ -959,11 +1086,16 @@ function openExplore() {
     });
 
 
-    setTimeout(() => {
+    setTimeout(
+        function() {
 
-        map.invalidateSize();
+            if (map) {
+                map.invalidateSize();
+            }
 
-    }, 400);
+        },
+        400
+    );
 }
 
 
@@ -974,6 +1106,16 @@ function openExplore() {
 function initMap() {
 
     if (map) {
+        return;
+    }
+
+
+    if (typeof L === "undefined") {
+
+        console.log(
+            "Leaflet is not loaded."
+        );
+
         return;
     }
 
@@ -994,7 +1136,8 @@ function initMap() {
             maxZoom: 19,
 
             attribution:
-                '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+                '&copy; OpenStreetMap contributors'
+
         }
 
     ).addTo(map);
@@ -1004,7 +1147,6 @@ function initMap() {
 
     updateMapMarkers();
 
-
     renderDiscovered();
 
     renderNearbyPlaces();
@@ -1012,7 +1154,7 @@ function initMap() {
 
 
 // ================================
-// 🏛️ إضافة المواقع التراثية
+// 🏛️ العلامات التراثية
 // ================================
 
 function addHeritageMarkers() {
@@ -1022,55 +1164,57 @@ function addHeritageMarkers() {
     }
 
 
-    heritagePlaces.forEach(place => {
+    heritagePlaces.forEach(
+        function(place) {
 
-        const marker =
-            L.marker([
-                place.lat,
-                place.lng
-            ]).addTo(map);
+            const marker =
+                L.marker([
+                    place.lat,
+                    place.lng
+                ]).addTo(map);
 
 
-        marker.bindPopup(`
+            marker.bindPopup(`
 
-            <div style="text-align:center">
+                <div style="text-align:center">
 
-                <strong>
-                    🏛️ ${place.name}
-                </strong>
+                    <strong>
+                        🏛️ ${place.name}
+                    </strong>
 
-                <br><br>
+                    <br><br>
 
-                <span>
-                    ${place.description}
-                </span>
+                    <span>
+                        ${place.description}
+                    </span>
 
-                <br><br>
+                    <br><br>
 
-                <button
-                    onclick="goToPlace(
-                        ${place.lat},
-                        ${place.lng}
-                    )"
-                    style="
-                        margin:0;
-                        padding:8px;
-                        font-size:13px;
-                    "
-                >
-                    📍 اذهب إلى الموقع
-                </button>
+                    <button
+                        onclick="goToPlace(
+                            ${place.lat},
+                            ${place.lng}
+                        )"
+                        style="
+                            margin:0;
+                            padding:8px;
+                            font-size:13px;
+                        "
+                    >
+                        📍 اذهب إلى الموقع
+                    </button>
 
-            </div>
+                </div>
 
-        `);
+            `);
 
-    });
+        }
+    );
 }
 
 
 // ================================
-// ⭐ علامات المواقع المكتشفة
+// ⭐ علامات المكتشفات
 // ================================
 
 function updateMapMarkers() {
@@ -1080,89 +1224,90 @@ function updateMapMarkers() {
     }
 
 
-    landmarkMarkers.forEach(marker => {
+    landmarkMarkers.forEach(
+        function(marker) {
 
-        map.removeLayer(marker);
+            map.removeLayer(marker);
 
-    });
+        }
+    );
 
 
     landmarkMarkers = [];
 
 
-    discovered.forEach(item => {
+    discovered.forEach(
+        function(item) {
 
-        const location =
-            landmarkLocations[item.key];
-
-
-        const landmark =
-            landmarks[item.key];
+            const location =
+                landmarkLocations[item.key];
 
 
-        if (!location || !landmark) {
-            return;
-        }
+            const landmark =
+                landmarks[item.key];
 
 
-        const info =
-            landmark[currentLanguage] ||
-            landmark.ar;
+            if (!location || !landmark) {
+                return;
+            }
 
 
-        const marker =
-            L.marker(
-                [
+            const info =
+                landmark[currentLanguage] ||
+                landmark.ar;
+
+
+            const marker =
+                L.marker([
                     location.lat,
                     location.lng
-                ]
-            )
-            .addTo(map);
+                ]).addTo(map);
 
 
-        marker.bindPopup(`
+            marker.bindPopup(`
 
-            <div style="text-align:center">
+                <div style="text-align:center">
 
-                <strong>
-                    ⭐ ${info.name}
-                </strong>
+                    <strong>
+                        ⭐ ${info.name}
+                    </strong>
 
-                <br><br>
+                    <br><br>
 
-                <span>
                     تم اكتشاف هذا الموقع
-                </span>
 
-                <br><br>
+                    <br><br>
 
-                <button
-                    onclick="goToPlace(
-                        ${location.lat},
-                        ${location.lng}
-                    )"
-                    style="
-                        margin:0;
-                        padding:8px;
-                        font-size:13px;
-                    "
-                >
-                    📍 اذهب إلى الموقع
-                </button>
+                    <button
+                        onclick="goToPlace(
+                            ${location.lat},
+                            ${location.lng}
+                        )"
+                        style="
+                            margin:0;
+                            padding:8px;
+                            font-size:13px;
+                        "
+                    >
+                        📍 اذهب إلى الموقع
+                    </button>
 
-            </div>
+                </div>
 
-        `);
+            `);
 
 
-        landmarkMarkers.push(marker);
+            landmarkMarkers.push(
+                marker
+            );
 
-    });
+        }
+    );
 }
 
 
 // ================================
-// 📍 تحديد موقع المستخدم
+// 📍 موقع المستخدم
 // ================================
 
 function locateUser() {
@@ -1170,9 +1315,7 @@ function locateUser() {
     if (!navigator.geolocation) {
 
         alert(
-            currentLanguage === "ar"
-                ? "المتصفح لا يدعم تحديد الموقع."
-                : "Geolocation is not supported."
+            "❌ المتصفح لا يدعم تحديد الموقع."
         );
 
         return;
@@ -1207,13 +1350,14 @@ function locateUser() {
                 L.marker([
                     lat,
                     lng
-                ])
-                .addTo(map)
-                .bindPopup(
-                    currentLanguage === "ar"
-                        ? "📍 موقعك الحالي"
-                        : "📍 Your current location"
-                );
+                ]).addTo(map);
+
+
+            userMarker.bindPopup(
+                currentLanguage === "ar"
+                    ? "📍 موقعك الحالي"
+                    : "📍 Your current location"
+            );
 
 
             userMarker.openPopup();
@@ -1228,16 +1372,14 @@ function locateUser() {
 
         function(error) {
 
-            console.error(error);
+            console.log(
+                "Location error:",
+                error
+            );
 
 
             alert(
-
-                currentLanguage === "ar"
-
-                    ? "تعذر تحديد موقعك. تأكدي من السماح للموقع في المتصفح."
-
-                    : "Unable to find your location. Please allow location access in your browser."
+                "❌ تعذر تحديد موقعك. تأكدي من السماح للموقع."
             );
         },
 
@@ -1246,19 +1388,23 @@ function locateUser() {
             timeout: 10000,
             maximumAge: 0
         }
-
     );
 }
 
 
 // ================================
-// 📍 الذهاب إلى موقع
+// 📍 الذهاب لموقع
 // ================================
 
 function goToPlace(lat, lng) {
 
     if (!map) {
         initMap();
+    }
+
+
+    if (!map) {
+        return;
     }
 
 
@@ -1270,7 +1416,7 @@ function goToPlace(lat, lng) {
 
 
 // ================================
-// 🏛️ عرض الأماكن التراثية
+// 🏛️ الأماكن
 // ================================
 
 function renderNearbyPlaces() {
@@ -1287,33 +1433,38 @@ function renderNearbyPlaces() {
 
 
     container.innerHTML =
+        heritagePlaces.map(
+            function(place) {
 
-        heritagePlaces.map(place => `
+                return `
 
-            <div class="place-card">
+                    <div class="place-card">
 
-                <h3>
-                    🏛️ ${place.name}
-                </h3>
+                        <h3>
+                            🏛️ ${place.name}
+                        </h3>
 
-                <p>
-                    ${place.description}
-                </p>
+                        <p>
+                            ${place.description}
+                        </p>
 
-                <button
-                    onclick="
-                        goToPlace(
-                            ${place.lat},
-                            ${place.lng}
-                        )
-                    "
-                >
-                    📍 اذهب إلى الموقع
-                </button>
+                        <button
+                            onclick="
+                                goToPlace(
+                                    ${place.lat},
+                                    ${place.lng}
+                                )
+                            "
+                        >
+                            📍 اذهب إلى الموقع
+                        </button>
 
-            </div>
+                    </div>
 
-        `).join("");
+                `;
+
+            }
+        ).join("");
 }
 
 
@@ -1337,12 +1488,6 @@ function changeLanguage() {
     }
 
 
-    console.log(
-        "Language:",
-        currentLanguage
-    );
-
-
     renderDiscovered();
 
 
@@ -1350,3 +1495,70 @@ function changeLanguage() {
         updateMapMarkers();
     }
 }
+
+
+// ================================
+// 🚀 تشغيل أزرار الصفحة
+// ================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        console.log(
+            "ATHAR script loaded successfully"
+        );
+
+
+        const cameraButton =
+            document.getElementById(
+                "cameraButton"
+            );
+
+
+        if (cameraButton) {
+
+            cameraButton.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    console.log(
+                        "Camera button clicked"
+                    );
+
+                    startCamera();
+
+                }
+            );
+
+        }
+
+
+        const captureButton =
+            document.getElementById(
+                "captureButton"
+            );
+
+
+        if (captureButton) {
+
+            captureButton.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    takePhoto();
+
+                }
+            );
+
+        }
+
+
+        renderDiscovered();
+
+    }
+);
