@@ -7,6 +7,12 @@
 
     <title>ATHAR | Discover Heritage</title>
 
+    <!-- Leaflet Map -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
     <style>
         * {
             box-sizing: border-box;
@@ -26,10 +32,6 @@
             margin: auto;
             padding: 35px 18px 60px;
         }
-
-        /* =========================
-           HEADER
-        ========================= */
 
         .hero {
             text-align: center;
@@ -68,10 +70,6 @@
             line-height: 1.7;
         }
 
-        /* =========================
-           LANGUAGE
-        ========================= */
-
         .language-box {
             max-width: 550px;
             margin: 0 auto 25px;
@@ -101,9 +99,33 @@
             outline: none;
         }
 
-        /* =========================
-           CAMERA
-        ========================= */
+        button {
+            width: 100%;
+            max-width: 430px;
+            display: block;
+            margin: 14px auto 0;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 13px;
+            background: #641f35;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #7a2943;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #cameraButton {
+            margin-bottom: 15px;
+        }
 
         .camera-section {
             padding: 15px;
@@ -151,45 +173,9 @@
             display: none;
         }
 
-        /* =========================
-           BUTTONS
-        ========================= */
-
-        button {
-            width: 100%;
-            max-width: 430px;
-            display: block;
-            margin: 14px auto 0;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 13px;
-            background: #641f35;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background: #7a2943;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        #cameraButton {
-            margin-bottom: 15px;
-        }
-
         #captureButton {
             margin-top: 18px;
         }
-
-        /* =========================
-           RESULT
-        ========================= */
 
         .result-section {
             margin-top: 30px;
@@ -215,9 +201,144 @@
             color: #4c3c41;
         }
 
+        .landmark-info h2 {
+            color: #641f35;
+            margin-top: 0;
+        }
+
+        .landmark-info p {
+            margin: 16px 0;
+        }
+
+        .landmark-info a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #641f35;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
         /* =========================
-           FOOTER
+           🗺️ قسم الخريطة
         ========================= */
+
+        .explore-section {
+            margin-top: 35px;
+        }
+
+        .explore-title {
+            text-align: center;
+            color: #641f35;
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .explore-subtitle {
+            text-align: center;
+            color: #725b61;
+            font-size: 14px;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        #map {
+            width: 100%;
+            height: 430px;
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid #d8c2b8;
+            box-shadow: 0 10px 30px rgba(65, 30, 40, 0.12);
+            margin-top: 18px;
+        }
+
+        .map-button {
+            margin-top: 15px;
+        }
+
+        .discovered-box {
+            margin-top: 22px;
+            padding: 20px;
+            background: rgba(255, 250, 246, 0.95);
+            border: 1px solid #ddccc3;
+            border-radius: 20px;
+        }
+
+        .discovered-title {
+            color: #641f35;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .discovered-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid #eadbd4;
+        }
+
+        .discovered-item:last-child {
+            border-bottom: none;
+        }
+
+        .discovered-star {
+            font-size: 25px;
+        }
+
+        .discovered-name {
+            flex: 1;
+            font-weight: bold;
+            color: #4b3038;
+        }
+
+        .discovered-date {
+            font-size: 12px;
+            color: #806b70;
+        }
+
+        .nearby-box {
+            margin-top: 22px;
+            padding: 20px;
+            background: rgba(255, 250, 246, 0.95);
+            border: 1px solid #ddccc3;
+            border-radius: 20px;
+        }
+
+        .nearby-title {
+            color: #641f35;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .place-card {
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #eadbd4;
+            border-radius: 15px;
+            background: #fffaf6;
+        }
+
+        .place-card h3 {
+            margin: 0 0 7px;
+            color: #641f35;
+        }
+
+        .place-card p {
+            margin: 5px 0;
+            color: #67545a;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .place-card button {
+            max-width: none;
+            margin-top: 10px;
+            padding: 11px;
+            font-size: 14px;
+        }
 
         .footer {
             margin-top: 35px;
@@ -225,10 +346,6 @@
             color: #806b70;
             font-size: 13px;
         }
-
-        /* =========================
-           MOBILE
-        ========================= */
 
         @media (max-width: 600px) {
 
@@ -261,6 +378,14 @@
             #result {
                 padding: 20px;
             }
+
+            #map {
+                height: 360px;
+            }
+
+            .discovered-item {
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -269,13 +394,8 @@
 
 <div class="app">
 
-    <!-- HEADER -->
-
     <div class="hero">
-
-        <div class="logo">
-            ATHAR
-        </div>
+        <div class="logo">ATHAR</div>
 
         <div class="gold-line"></div>
 
@@ -286,11 +406,10 @@
         <p>
             اكتشف تاريخ الآثار من خلال كامرتك
         </p>
-
     </div>
 
 
-    <!-- LANGUAGE -->
+    <!-- 🌍 اللغة -->
 
     <div class="language-box">
 
@@ -300,37 +419,24 @@
 
         <select
             id="language"
-            onchange="changeLanguage()">
-
-            <option value="ar">
-                🇸🇦 العربية
-            </option>
-
-            <option value="en">
-                🇬🇧 English
-            </option>
-
-            <option value="fr">
-                🇫🇷 Français
-            </option>
-
-            <option value="es">
-                🇪🇸 Español
-            </option>
-
+            onchange="changeLanguage()"
+        >
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="es">🇪🇸 Español</option>
         </select>
 
     </div>
 
 
-    <!-- CAMERA -->
+    <!-- 📷 الكاميرا -->
 
     <button
         onclick="startCamera()"
-        id="cameraButton">
-
+        id="cameraButton"
+    >
         📷 Open Camera | فتح الكاميرا
-
     </button>
 
 
@@ -345,20 +451,19 @@
             <video
                 id="camera"
                 autoplay
-                playsinline>
-            </video>
+                playsinline
+            ></video>
 
             <div
                 class="camera-message"
-                id="cameraMessage">
-
+                id="cameraMessage"
+            >
                 📷 Camera Preview
                 <br>
 
                 <span>
                     ستظهر الكاميرا هنا
                 </span>
-
             </div>
 
         </div>
@@ -366,21 +471,18 @@
     </div>
 
 
-    <!-- CAPTURE -->
-
     <button
         onclick="takePhoto()"
-        id="captureButton">
-
+        id="captureButton"
+    >
         📸 Capture Landmark | التقاط الأثر
-
     </button>
 
 
     <canvas id="photo"></canvas>
 
 
-    <!-- RESULT -->
+    <!-- 🏛️ النتيجة -->
 
     <div class="result-section">
 
@@ -389,8 +491,68 @@
         </div>
 
         <div id="result">
-
             لم يتم التعرف على موقع بعد
+        </div>
+
+    </div>
+
+
+    <!-- 🗺️ استكشف حولك -->
+
+    <div class="explore-section">
+
+        <div class="explore-title">
+            🗺️ استكشف حولك
+        </div>
+
+        <div class="explore-subtitle">
+            اكتشفي الآثار التي تعرفتِ عليها واستكشفي مواقع التراث على الخريطة
+        </div>
+
+
+        <button
+            class="map-button"
+            onclick="openExplore()"
+        >
+            🗺️ فتح الخريطة
+        </button>
+
+
+        <button
+            class="map-button"
+            onclick="locateUser()"
+        >
+            📍 تحديد موقعي
+        </button>
+
+
+        <div id="map"></div>
+
+
+        <!-- ⭐ المواقع المكتشفة -->
+
+        <div class="discovered-box">
+
+            <div class="discovered-title">
+                ⭐ مواقعي المكتشفة
+            </div>
+
+            <div id="discoveredList">
+                لم تكتشفي أي موقع بعد.
+            </div>
+
+        </div>
+
+
+        <!-- 🏛️ أماكن التراث -->
+
+        <div class="nearby-box">
+
+            <div class="nearby-title">
+                🏛️ مواقع تراثية للاستكشاف
+            </div>
+
+            <div id="nearbyPlaces"></div>
 
         </div>
 
@@ -404,14 +566,26 @@
 </div>
 
 
-<!-- AI -->
+<!-- TensorFlow.js -->
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4"></script>
 
+
+<!-- Teachable Machine -->
+
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 
-<script src="script.js?v=2"></script>
+
+<!-- Leaflet -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<!-- ATHAR JavaScript -->
+
+<script src="script.js?v=3"></script>
 
 </body>
-
 </html>
