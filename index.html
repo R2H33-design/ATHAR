@@ -3,12 +3,10 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#782e46">
   <title>ATHAR | Discover Heritage</title>
-
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <style>
     :root {
@@ -18,9 +16,8 @@
       --gold: #d9a85d;
       --ink: #34262b;
       --muted: #786a6d;
-      --white: #ffffff;
       --border: #eadbd9;
-      --shadow: 0 12px 35px rgba(75, 35, 48, .10);
+      --shadow: 0 12px 35px rgba(75,35,48,.10);
     }
 
     * { box-sizing: border-box; }
@@ -37,21 +34,11 @@
     }
 
     button, select { font: inherit; }
-
-    button {
-      border: 0;
-      cursor: pointer;
-      transition: transform .2s, opacity .2s, background .2s;
-    }
-
+    button { cursor: pointer; transition: .2s; }
     button:hover { transform: translateY(-1px); }
     button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 
-    .container {
-      width: min(920px, 100%);
-      margin: auto;
-      padding: 20px 15px 45px;
-    }
+    .container { width: min(920px, 100%); margin: auto; padding: 20px 15px 45px; }
 
     header {
       display: flex;
@@ -61,338 +48,114 @@
       margin-bottom: 22px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-
+    .brand { display: flex; align-items: center; gap: 11px; }
     .brand-icon {
-      display: grid;
-      place-items: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-      background: var(--wine);
-      color: white;
-      font-size: 25px;
-      box-shadow: var(--shadow);
+      display: grid; place-items: center; width: 48px; height: 48px;
+      border-radius: 16px; background: var(--wine); color: white;
+      font-size: 25px; box-shadow: var(--shadow);
     }
-
-    .brand h1 {
-      color: var(--wine-dark);
-      margin: 0;
-      letter-spacing: 3px;
-      font-size: 25px;
-    }
-
-    .brand p {
-      margin: 3px 0 0;
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .brand h1 { color: var(--wine-dark); margin: 0; letter-spacing: 3px; font-size: 25px; }
+    .brand p { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
 
     #language {
-      max-width: 145px;
-      padding: 11px;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      background: white;
-      color: var(--ink);
+      max-width: 145px; padding: 11px; border: 1px solid var(--border);
+      border-radius: 13px; background: white; color: var(--ink);
     }
 
     .hero {
-      padding: 30px 22px;
-      border-radius: 25px;
+      padding: 30px 22px; border-radius: 25px;
       background: linear-gradient(135deg, #782e46, #4e1c30);
-      color: white;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
+      color: white; position: relative; overflow: hidden;
+      box-shadow: var(--shadow); margin-bottom: 20px;
     }
-
     .hero::after {
-      content: "✦";
-      position: absolute;
-      font-size: 155px;
-      color: rgba(255,255,255,.07);
-      left: 18px;
-      top: -38px;
+      content: "✦"; position: absolute; font-size: 155px;
+      color: rgba(255,255,255,.07); left: 18px; top: -38px;
     }
-
-    .hero h2 {
-      position: relative;
-      z-index: 1;
-      font-size: clamp(24px, 5vw, 34px);
-      margin: 0 0 12px;
-    }
-
-    .hero p {
-      position: relative;
-      z-index: 1;
-      max-width: 600px;
-      line-height: 1.9;
-      color: #f7e9ec;
-      margin: 0;
-    }
+    .hero h2 { position: relative; z-index: 1; font-size: clamp(24px,5vw,34px); margin: 0 0 12px; }
+    .hero p { position: relative; z-index: 1; max-width: 600px; line-height: 1.9; color: #f7e9ec; margin: 0; }
 
     .section {
-      background: rgba(255,255,255,.91);
-      border: 1px solid rgba(234,219,217,.9);
-      border-radius: 22px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow);
+      background: rgba(255,255,255,.91); border: 1px solid var(--border);
+      border-radius: 22px; padding: 20px; margin-bottom: 18px; box-shadow: var(--shadow);
     }
-
     .section-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 16px;
-      color: var(--wine-dark);
-      font-size: 20px;
+      display: flex; align-items: center; gap: 10px;
+      margin: 0 0 16px; color: var(--wine-dark); font-size: 20px;
     }
-
     .section-title span { font-size: 23px; }
 
     .camera-frame {
-      overflow: hidden;
-      border-radius: 18px;
-      background: #21171b;
-      min-height: 220px;
-      display: grid;
-      place-items: center;
-      position: relative;
+      overflow: hidden; border-radius: 18px; background: #21171b;
+      min-height: 220px; display: grid; place-items: center;
     }
+    #camera { width: 100%; max-height: 440px; display: none; object-fit: cover; }
+    #photo { display: none; width: 100%; max-height: 440px; object-fit: contain; background: #21171b; }
+    .camera-placeholder { padding: 30px 15px; color: #f9eaf0; text-align: center; line-height: 1.8; }
+    .camera-icon { font-size: 48px; display: block; margin-bottom: 8px; }
 
-    #camera {
-      width: 100%;
-      max-height: 440px;
-      display: none;
-      object-fit: cover;
-    }
-
-    #photo {
-      display: none;
-      width: 100%;
-      max-height: 440px;
-      object-fit: contain;
-      background: #21171b;
-    }
-
-    .camera-placeholder {
-      padding: 30px 15px;
-      color: #f9eaf0;
-      text-align: center;
-      line-height: 1.8;
-    }
-
-    .camera-placeholder .camera-icon {
-      font-size: 48px;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .camera-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .btn {
-      padding: 12px 17px;
-      border-radius: 13px;
-      background: var(--wine);
-      color: white;
-      font-weight: 700;
-    }
-
-    .btn.secondary {
-      background: #f4e8e8;
-      color: var(--wine-dark);
-    }
-
-    .btn.gold {
-      background: #f5e3bd;
-      color: #573a18;
-    }
-
+    .camera-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+    .btn { padding: 12px 17px; border-radius: 13px; background: var(--wine); color: white; font-weight: 700; }
+    .btn.secondary { background: #f4e8e8; color: var(--wine-dark); }
+    .btn.gold { background: #f5e3bd; color: #573a18; }
     .star-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 46px;
-      padding: 10px 16px;
-      border-radius: 14px;
-      background: #fff1cb;
-      color: #6c4815;
-      font-size: 18px;
-      font-weight: 800;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 46px; padding: 10px 16px; border-radius: 14px;
+      background: #fff1cb; color: #6c4815; font-size: 16px; font-weight: 800;
       border: 1px solid #f0d28b;
     }
+    .star-button.saved { background: #e6f5e9; border-color: #b8dfc0; color: #27683b; }
 
-    .star-button.saved {
-      background: #e6f5e9;
-      border-color: #b8dfc0;
-      color: #27683b;
+    .status { color: var(--muted); font-size: 14px; line-height: 1.8; margin: 12px 0 0; overflow-wrap: anywhere; }
+    .result-card { margin-top: 18px; border: 1px solid var(--border); border-radius: 18px; padding: 18px; background: #fffdf9; }
+    .result-card h3 { color: var(--wine); font-size: 23px; margin: 0 0 12px; }
+    .result-card p { line-height: 1.9; margin: 9px 0; }
+    .info-label { color: var(--wine-dark); font-weight: 800; }
+    .fact { background: #fbf0dc; border-inline-start: 4px solid var(--gold); padding: 12px; border-radius: 10px; margin-top: 12px; line-height: 1.8; }
+
+    /* الخريطة والسوق يظهران داخل معلومات المعلم بالترتيب المطلوب */
+    .landmark-map {
+      margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border);
     }
-
-    .status {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.8;
-      margin: 12px 0 0;
-      overflow-wrap: anywhere;
-    }
-
-    .result-card {
-      margin-top: 18px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      background: #fffdf9;
-    }
-
-    .result-card h3 {
-      color: var(--wine);
-      font-size: 23px;
-      margin: 0 0 12px;
-    }
-
-    .result-card p {
-      line-height: 1.9;
-      margin: 9px 0;
-    }
-
-    .info-label {
-      color: var(--wine-dark);
-      font-weight: 800;
-    }
-
-    .fact {
-      background: #fbf0dc;
-      border-inline-start: 4px solid var(--gold);
-      padding: 12px;
-      border-radius: 10px;
-      margin-top: 12px;
-      line-height: 1.8;
-    }
-
-    .nearby-card {
-      display: grid;
-      grid-template-columns: 125px minmax(0, 1fr);
-      gap: 14px;
-      align-items: start;
-      margin-top: 18px;
-      padding-top: 17px;
+    .landmark-map h4, .market-heading { color: var(--wine-dark); margin: 0 0 12px; font-size: 18px; }
+    .map-canvas { width: 100%; height: 280px; border-radius: 15px; overflow: hidden; }
+    .market-card {
+      display: grid; grid-template-columns: 125px minmax(0,1fr);
+      gap: 14px; align-items: start; margin-top: 16px; padding-top: 17px;
       border-top: 1px solid var(--border);
     }
-
-    .nearby-card img {
-      width: 100%;
-      height: 125px;
-      object-fit: cover;
-      border-radius: 14px;
-      background: #f0e3df;
+    .market-card img {
+      width: 100%; height: 125px; object-fit: cover;
+      border-radius: 14px; background: #f0e3df;
     }
+    .market-card h5 { margin: 0 0 7px; color: var(--wine-dark); font-size: 17px; }
+    .market-card p { font-size: 14px; color: var(--muted); margin: 0 0 8px; line-height: 1.8; }
+    .text-link { display: inline-block; color: var(--wine); font-weight: 800; text-decoration: underline; margin-top: 4px; }
 
-    .nearby-card h4 {
-      margin: 0 0 7px;
-      color: var(--wine-dark);
-      font-size: 17px;
-    }
-
-    .nearby-card p {
-      font-size: 14px;
-      color: var(--muted);
-      margin: 0 0 8px;
-    }
-
-    .text-link {
-      display: inline-block;
-      color: var(--wine);
-      font-weight: 800;
-      text-decoration: underline;
-      margin-top: 4px;
-    }
-
-    .list {
-      display: grid;
-      gap: 10px;
-    }
-
+    .list { display: grid; gap: 10px; }
     .place-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: #fffdf9;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; padding: 13px; border: 1px solid var(--border);
+      border-radius: 14px; background: #fffdf9;
     }
-
-    .place-name {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      line-height: 1.6;
-    }
-
+    .place-name { display: flex; align-items: center; gap: 10px; line-height: 1.6; }
     .place-name .emoji { font-size: 25px; }
+    .place-row small { display: block; color: var(--muted); font-size: 12px; }
+    .mini-btn { padding: 9px 11px; border-radius: 10px; background: #f4e8e8; color: var(--wine-dark); white-space: nowrap; font-weight: 700; }
+    .empty { padding: 18px; border-radius: 14px; text-align: center; background: #faf1ed; color: var(--muted); line-height: 1.8; }
 
-    .place-row small {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .mini-btn {
-      padding: 9px 11px;
-      border-radius: 10px;
-      background: #f4e8e8;
-      color: var(--wine-dark);
-      white-space: nowrap;
-      font-weight: 700;
-    }
-
-    .empty {
-      padding: 18px;
-      border-radius: 14px;
-      text-align: center;
-      background: #faf1ed;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    #map {
-      height: 350px;
-      width: 100%;
-      border-radius: 17px;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      padding: 10px;
-    }
+    #map { height: 350px; width: 100%; border-radius: 17px; overflow: hidden; }
+    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px; }
 
     @media (max-width: 480px) {
       .container { padding: 13px 10px 30px; }
       .section { padding: 15px; }
       .hero { padding: 25px 18px; }
-      .nearby-card { grid-template-columns: 95px minmax(0, 1fr); gap: 10px; }
-      .nearby-card img { height: 105px; }
+      .market-card { grid-template-columns: 95px minmax(0,1fr); gap: 10px; }
+      .market-card img { height: 105px; }
       .camera-actions .btn { flex: 1 1 42%; }
       .star-button { flex: 1 1 100%; }
+      .map-canvas { height: 240px; }
       #map { height: 300px; }
     }
   </style>
@@ -403,12 +166,8 @@
     <header>
       <div class="brand">
         <div class="brand-icon">🏛️</div>
-        <div>
-          <h1>ATHAR</h1>
-          <p>Discover Heritage</p>
-        </div>
+        <div><h1>ATHAR</h1><p>Discover Heritage</p></div>
       </div>
-
       <select id="language" aria-label="Language">
         <option value="ar">🇸🇦 العربية</option>
         <option value="en">🇬🇧 English</option>
@@ -419,17 +178,11 @@
 
     <section class="hero">
       <h2 id="heroTitle">اكتشف تاريخ الآثار من خلال كامرتك</h2>
-      <p id="heroDescription">
-        تعرّف على المواقع التاريخية في المملكة، واكتشف قصصها وأهميتها،
-        واستكشف الأماكن التراثية القريبة منها.
-      </p>
+      <p id="heroDescription">تعرّف على المواقع التاريخية في المملكة، واكتشف قصصها وأهميتها، واستكشف الأماكن التراثية القريبة منها.</p>
     </section>
 
-    <section class="section" id="cameraSection">
-      <h2 class="section-title">
-        <span>📷</span><span id="cameraHeading">اكتشف أثرًا</span>
-      </h2>
-
+    <section class="section">
+      <h2 class="section-title"><span>📷</span><span id="cameraHeading">اكتشف أثرًا</span></h2>
       <div class="camera-frame">
         <div class="camera-placeholder" id="cameraPlaceholder">
           <span class="camera-icon">📸</span>
@@ -438,62 +191,32 @@
         <video id="camera" autoplay playsinline muted></video>
         <img id="photo" alt="Captured landmark">
       </div>
-
       <div class="camera-actions">
         <button class="btn" id="cameraButton">📷 فتح الكاميرا</button>
-        <button class="btn secondary" id="captureButton" disabled>
-          📸 التقاط الأثر
-        </button>
-        <button class="star-button" id="favoriteButton" disabled
-          title="Add detected landmark to discovered places">
-          ⭐ <span id="favoriteButtonText">إضافة للمكتشفات</span>
-        </button>
+        <button class="btn secondary" id="captureButton" disabled>📸 التقاط الأثر</button>
+        <button class="star-button" id="favoriteButton" disabled>⭐ <span id="favoriteButtonText">إضافة للمكتشفات</span></button>
       </div>
-
-      <p class="status" id="cameraMessage" aria-live="polite">
-        جارٍ تجهيز الموقع...
-      </p>
-
+      <p class="status" id="cameraMessage" aria-live="polite">جارٍ تجهيز الموقع...</p>
       <div id="result" hidden></div>
     </section>
 
-    <section class="section" id="discoveredSection">
-      <h2 class="section-title">
-        <span>⭐</span><span id="discoveredHeading">المواقع المكتشفة</span>
-      </h2>
+    <section class="section">
+      <h2 class="section-title"><span>⭐</span><span id="discoveredHeading">المواقع المكتشفة</span></h2>
       <div class="list" id="discoveredList"></div>
     </section>
 
-    <section class="section" id="remainingSection">
-      <h2 class="section-title">
-        <span>🧭</span><span id="remainingHeading">المواقع المتبقية للاستكشاف</span>
-      </h2>
+    <section class="section">
+      <h2 class="section-title"><span>🧭</span><span id="remainingHeading">المواقع المتبقية للاستكشاف</span></h2>
       <div class="list" id="remainingPlaces"></div>
     </section>
 
+    <!-- الخريطة العامة فقط؛ لا يوجد هنا قسم سوق مكرر -->
     <section class="section" id="exploreSection">
-      <h2 class="section-title">
-        <span>🗺️</span><span id="mapHeading">الخريطة واستكشف حولك</span>
-      </h2>
-
-      <button class="btn secondary" id="exploreButton">
-        🧭 استكشف حولك
-      </button>
-      <button class="btn secondary" id="locateButton">
-        📍 تحديد موقعي
-      </button>
-
+      <h2 class="section-title"><span>🗺️</span><span id="mapHeading">الخريطة واستكشف حولك</span></h2>
+      <button class="btn secondary" id="exploreButton">🧭 استكشف حولك</button>
+      <button class="btn secondary" id="locateButton">📍 تحديد موقعي</button>
       <p class="status" id="mapMessage"></p>
       <div id="map" aria-label="Map of heritage landmarks"></div>
-
-      <h3 id="nearbyHeading" style="color:var(--wine-dark);margin-top:22px">
-        الأماكن القريبة
-      </h3>
-      <div id="nearbyPlaces" class="list">
-        <div class="empty" id="nearbyEmpty">
-          اكتشف أثرًا أولًا لعرض الأماكن القريبة منه.
-        </div>
-      </div>
     </section>
 
     <footer id="footerText">ATHAR — رحلة لاكتشاف التراث السعودي</footer>
@@ -502,6 +225,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
